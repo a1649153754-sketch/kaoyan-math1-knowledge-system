@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "使用本项目进行教学、研究或二次整理时，请引用本项目及对应版本。"
+title: "考研数学一知识体系"
+type: dataset
+authors:
+  - name: "考研数学一知识体系贡献者"
+version: 1.2.0
+date-released: 2026-08-25
+license: CC-BY-NC-SA-4.0

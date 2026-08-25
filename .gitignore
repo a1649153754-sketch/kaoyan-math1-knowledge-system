@@ -1,0 +1,31 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+
+# Documentation build
+site/
+dist/*.html
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Personal/private data exports
+private/
+data/private-*.csv
+
+# Generated publication artifacts
+dist/
+docs/downloads/*.docx
+docs/downloads/*.pdf
+docs/downloads/*.md
+!docs/downloads/README.md
+releases/v*/*.docx
+releases/v*/*.pdf
+releases/v*/*.md
+!releases/v*/README.md
+docs/assets/images/*.png
+social-preview.png

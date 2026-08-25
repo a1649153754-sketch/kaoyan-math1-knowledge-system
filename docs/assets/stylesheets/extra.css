@@ -1,0 +1,44 @@
+:root {
+  --math1-table-font-size: 0.78rem;
+}
+
+.md-grid {
+  max-width: 1580px;
+}
+
+.md-typeset h1 {
+  font-weight: 750;
+}
+
+.md-typeset h2 {
+  margin-top: 1.8em;
+}
+
+.md-typeset__table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.md-typeset table:not([class]) {
+  display: table;
+  width: 100%;
+  font-size: var(--math1-table-font-size);
+}
+
+.md-typeset table:not([class]) th {
+  white-space: nowrap;
+}
+
+.md-typeset .task-list-control {
+  vertical-align: middle;
+}
+
+.md-typeset code {
+  word-break: normal;
+}
+
+@media screen and (max-width: 760px) {
+  :root {
+    --math1-table-font-size: 0.72rem;
+  }
+}

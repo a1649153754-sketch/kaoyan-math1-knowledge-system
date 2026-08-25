@@ -3,7 +3,7 @@
 > 一套可持续增补、可定位薄弱点、可关联真题与错题的考研数学一知识树。
 
 <p align="center">
-  <img src="docs/assets/images/social-preview.png" alt="考研数学一知识体系封面" width="900">
+  <img src="docs/assets/images/social-preview.svg" alt="考研数学一知识体系封面" width="900">
 </p>
 
 ## 当前版本
@@ -36,11 +36,11 @@
 - [典型母题索引](docs/11-problem-archetypes.md)
 - [反例与失效边界库](docs/12-counterexamples.md)
 
-## 下载完整版本
+## 获取完整版本
 
-- [Word 版 v1.2](releases/v1.2/考研数学一知识体系_v1.2.docx)
-- [PDF 版 v1.2](releases/v1.2/考研数学一知识体系_v1.2.pdf)
-- [单文件 Markdown 版 v1.2](releases/v1.2/考研数学一知识体系_v1.2.md)
+- 在线阅读：进入 [GitHub Pages 文档站](https://a1649153754-sketch.github.io/kaoyan-math1-knowledge-system/)（首次部署完成后生效）。
+- 单文件 Markdown：运行 `python scripts/build_bundle.py`，输出到 `dist/`。
+- Word、PDF 与发布压缩包：在仓库的 **Releases** 页面下载；二进制发布物不重复写入 Git 历史。
 
 ## 一键上传到 GitHub（Windows）
 

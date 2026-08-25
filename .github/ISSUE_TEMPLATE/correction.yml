@@ -1,0 +1,31 @@
+name: 内容纠错
+about: 报告公式、条件、定义、编号或措辞错误
+title: "[纠错] "
+labels:
+  - correction
+body:
+  - type: input
+    id: node
+    attributes:
+      label: 节点或卡片编号
+      description: 例如 H1.5、F-H1-12、B-L04
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: 当前表述
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: 建议修改
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 理由、推导、反例或来源
+    validations:
+      required: true

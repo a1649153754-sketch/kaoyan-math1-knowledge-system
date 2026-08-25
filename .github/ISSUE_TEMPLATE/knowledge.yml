@@ -1,0 +1,33 @@
+name: 新增或完善知识点
+about: 提议增加方法、题型、公式卡、母题或反例
+title: "[增补] "
+labels:
+  - enhancement
+body:
+  - type: dropdown
+    id: category
+    attributes:
+      label: 类型
+      options:
+        - 正文知识节点
+        - 公式卡 F
+        - 母题 Q
+        - 反例卡 B
+        - 个人疑问 J
+        - 复习模板或项目工具
+    validations:
+      required: true
+  - type: input
+    id: parent
+    attributes:
+      label: 建议挂接位置
+      description: 例如 H8.7 或 P6
+    validations:
+      required: true
+  - type: textarea
+    id: content
+    attributes:
+      label: 建议内容
+      description: 请尽量包含触发信号、条件、结论、步骤和失效边界。
+    validations:
+      required: true
