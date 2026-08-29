@@ -21,6 +21,8 @@
 
 不要只写“记住这个公式”，也不要把经验性技巧伪装成无条件定理。
 
+公共 `data/*.csv` 必须保持仅含表头。个人成绩、用时、错题和掌握状态只写入被 Git 忽略的 `data/local/`；PR 不得包含该目录中的数据或生成报告。
+
 ## 编号规范
 
 - **正式知识节点**：`docs/01—04` 中的 `H/L/P/M数字.数字`，例如 `H7.5`。只有这些编号可以作为下游题目与资源的正式节点。
@@ -43,6 +45,7 @@
 python -m unittest discover -s tests -p "test_*.py"
 python scripts/validate_project.py
 python scripts/build_released_identities.py --check
+python scripts/check_bundle_deterministic.py
 zensical build --clean
 ```
 

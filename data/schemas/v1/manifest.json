@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0.0",
+  "datasets": {
+    "progress": {
+      "template": "data/progress.csv",
+      "schema": "data/schemas/v1/progress.schema.json"
+    },
+    "questions": {
+      "template": "data/questions.csv",
+      "schema": "data/schemas/v1/questions.schema.json"
+    },
+    "errors": {
+      "template": "data/errors.csv",
+      "schema": "data/schemas/v1/errors.schema.json"
+    }
+  }
+}

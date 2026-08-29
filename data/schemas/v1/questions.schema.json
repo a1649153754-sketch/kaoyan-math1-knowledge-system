@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/a1649153754-sketch/kaoyan-math1-knowledge-system/main/data/schemas/v1/questions.schema.json",
+  "title": "Question attempt row",
+  "type": "object",
+  "additionalProperties": true,
+  "x-dataset": "questions",
+  "x-schema-version": "1.0.0",
+  "x-csv-header": [
+    "date", "source", "year", "question_no", "mother_id", "node_ids", "result",
+    "time_minutes", "error_tags", "next_review", "notes", "difficulty", "review_count",
+    "review_interval_days", "schema_version"
+  ],
+  "x-legacy-headers": [[
+    "date", "source", "year", "question_no", "mother_id", "node_ids", "result",
+    "time_minutes", "error_tags", "next_review", "notes"
+  ]],
+  "required": ["date", "source", "node_ids", "result"],
+  "properties": {
+    "date": {"type": "string", "format": "date"},
+    "source": {"type": "string", "minLength": 1},
+    "year": {"type": "string", "pattern": "^(|20\\d{2})$"},
+    "question_no": {"type": "string"},
+    "mother_id": {"type": "string", "pattern": "^(|Q-[A-Z]\\d+)$"},
+    "node_ids": {"type": "string", "minLength": 1},
+    "result": {"type": "string", "enum": ["correct", "partial", "wrong", "skipped"]},
+    "time_minutes": {"type": "string", "pattern": "^(|\\d+(\\.\\d+)?)$"},
+    "error_tags": {"type": "string", "pattern": "^(|[CTMARSER](;[CTMARSER])*)$"},
+    "next_review": {"type": "string", "format": "date"},
+    "notes": {"type": "string"},
+    "difficulty": {"type": "string", "pattern": "^(|100|[1-9]?[0-9])$"},
+    "review_count": {"type": "string", "pattern": "^(|\\d+)$"},
+    "review_interval_days": {"type": "string", "enum": ["", "3", "7", "14"]},
+    "schema_version": {"type": "string", "enum": ["", "1.0.0"]}
+  }
+}

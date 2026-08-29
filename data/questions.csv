@@ -1,2 +1,1 @@
-﻿date,source,year,question_no,mother_id,node_ids,result,time_minutes,error_tags,next_review,notes
-,,,,,,,,,,
+date,source,year,question_no,mother_id,node_ids,result,time_minutes,error_tags,next_review,notes,difficulty,review_count,review_interval_days,schema_version

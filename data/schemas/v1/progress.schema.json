@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/a1649153754-sketch/kaoyan-math1-knowledge-system/main/data/schemas/v1/progress.schema.json",
+  "title": "Knowledge progress row",
+  "type": "object",
+  "additionalProperties": true,
+  "x-dataset": "progress",
+  "x-schema-version": "1.0.0",
+  "x-csv-header": [
+    "node_id", "title", "priority", "level", "last_review", "next_review",
+    "status", "evidence", "notes", "review_count", "review_interval_days", "schema_version"
+  ],
+  "x-legacy-headers": [[
+    "node_id", "title", "priority", "level", "last_review", "next_review",
+    "status", "evidence", "notes"
+  ]],
+  "required": ["node_id"],
+  "properties": {
+    "node_id": {"type": "string", "pattern": "^[HLPM]\\d+\\.\\d+$"},
+    "title": {"type": "string"},
+    "priority": {"type": "string", "enum": ["", "A+", "A", "B", "C"]},
+    "level": {"type": "string", "pattern": "^(|[0-4])$"},
+    "last_review": {"type": "string", "format": "date"},
+    "next_review": {"type": "string", "format": "date"},
+    "status": {"type": "string", "enum": ["", "todo", "learning", "reviewing", "mastered", "paused"]},
+    "evidence": {"type": "string"},
+    "notes": {"type": "string"},
+    "review_count": {"type": "string", "pattern": "^(|\\d+)$"},
+    "review_interval_days": {"type": "string", "enum": ["", "3", "7", "14"]},
+    "schema_version": {"type": "string", "enum": ["", "1.0.0"]}
+  }
+}

@@ -30,24 +30,25 @@
 
 ## 四、个人数据层
 
-`data/` 中提供三张空白表：
+`data/` 中提供三张仅含表头的公共模板：
 
 - `progress.csv`：知识节点掌握等级与回测日期。
 - `questions.csv`：真题/练习题与母题、节点的挂接。
 - `errors.csv`：错因、修复动作和复测状态。
 
-这些数据默认不进入公开文档正文。若含个人成绩、学校或其他隐私，公开仓库前应删除或另设私有分支。
+不得直接在公共模板中填数据。运行 `python scripts/init_local_data.py` 后，在被 Git 忽略的 `data/local/` 中记录个人成绩、用时、错题和掌握状态。Schema 位于 `data/schemas/v1/`；旧版数据先运行迁移脚本，再进行本地校验和报告生成。完整流程见[本地掌握图谱与自动复盘](15-local-data.md)。
 
 ## 五、发布一个新版本
 
 ```bash
-# 1. 编辑 docs/ 与 data/
+# 1. 编辑 docs/ 与公共空白数据契约
 python -m unittest discover -s tests -p "test_*.py"
 python scripts/validate_project.py
 python scripts/build_released_identities.py --check
+python scripts/check_bundle_deterministic.py
 
 # 2. 修改 VERSION，例如 1.3.0
-python scripts/build_bundle.py
+python scripts/check_bundle_deterministic.py
 
 # 3. 更新 CHANGELOG.md
 # 4. 提交、合并并创建 v1.3.0 标签
@@ -62,12 +63,13 @@ python scripts/build_bundle.py
 - `main`：始终保持可构建。
 - `docs/H1-limit`：某个知识专题的增补。
 - `fix/L4-rank-condition`：条件、公式或表述纠错。
-- `data/personal-review`：个人数据更新，公开前注意隐私。
+- `feat/data-contract`：只用于公共空白模板、Schema 或工具变更，不包含个人记录。
+- 个人记录不创建公开分支；只保存在 `data/local/` 或其他私有存储。
 
 提交信息示例：
 
 ```text
 docs(H1): 补充参数极限临界值分类
 fix(P6): 修正卡方分布自由度条件
-data(Q-H07): 挂接 2022 年真题复盘
+chore(data): 升级公共 CSV Schema
 ```
