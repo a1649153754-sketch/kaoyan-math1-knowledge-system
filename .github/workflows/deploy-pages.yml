@@ -31,7 +31,10 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Validate project
-        run: python scripts/validate_project.py
+        run: |
+          python -m unittest discover -s tests -p "test_*.py"
+          python scripts/validate_project.py
+          python scripts/build_released_identities.py --check
 
       - name: Build documentation
         run: zensical build --clean
