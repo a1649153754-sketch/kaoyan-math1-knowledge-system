@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/a1649153754-sketch/kaoyan-math1-knowledge-system/main/data/schemas/v1/errors.schema.json",
+  "title": "Error log row",
+  "type": "object",
+  "additionalProperties": true,
+  "x-dataset": "errors",
+  "x-schema-version": "1.0.0",
+  "x-csv-header": [
+    "error_id", "date", "source", "node_ids", "mother_id", "error_tag", "summary",
+    "fix_action", "next_review", "status", "notes", "severity", "review_count",
+    "review_interval_days", "schema_version"
+  ],
+  "x-legacy-headers": [[
+    "error_id", "date", "source", "node_ids", "mother_id", "error_tag", "summary",
+    "fix_action", "next_review", "status", "notes"
+  ]],
+  "required": ["error_id", "date", "source", "node_ids", "error_tag", "summary", "status"],
+  "properties": {
+    "error_id": {"type": "string", "pattern": "^E-\\d{4,}$"},
+    "date": {"type": "string", "format": "date"},
+    "source": {"type": "string", "minLength": 1},
+    "node_ids": {"type": "string", "minLength": 1},
+    "mother_id": {"type": "string", "pattern": "^(|Q-[A-Z]\\d+)$"},
+    "error_tag": {"type": "string", "pattern": "^[CTMARSER](;[CTMARSER])*$"},
+    "summary": {"type": "string", "minLength": 1},
+    "fix_action": {"type": "string"},
+    "next_review": {"type": "string", "format": "date"},
+    "status": {"type": "string", "enum": ["open", "reviewing", "resolved", "recurring"]},
+    "notes": {"type": "string"},
+    "severity": {"type": "string", "enum": ["", "low", "medium", "high", "critical"]},
+    "review_count": {"type": "string", "pattern": "^(|\\d+)$"},
+    "review_interval_days": {"type": "string", "enum": ["", "3", "7", "14"]},
+    "schema_version": {"type": "string", "enum": ["", "1.0.0"]}
+  }
+}

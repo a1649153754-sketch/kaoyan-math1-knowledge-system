@@ -8,7 +8,7 @@
 
 ## 当前版本
 
-**v1.2.1 · 2026-08-29**
+**v1.3.0 · 2026-08-29**
 
 | 模块 | 当前规模 |
 | --- | ---: |
@@ -26,6 +26,7 @@
 - **题目挂接**：真题、错题和疑问可挂到 `Q / B / J` 编号，逐步形成个人掌握图谱。
 - **版本可追溯**：`releases/` 保存历史版本；`CHANGELOG.md` 记录每次升级。
 - **契约可校验**：正式节点、三级清单项与 `F / Q / B / J` 资源使用独立命名空间；发布过的 ID 由机器基线保护。
+- **公核私层**：Git 只保存通用知识、空白模板和版本化 Schema；个人掌握、用时、错题与报告写入被忽略的 `data/local/`。
 - **网页可发布**：内置 Zensical 配置和 GitHub Actions，推送后可自动部署为 GitHub Pages 文档站。
 
 ## 快速阅读
@@ -37,6 +38,7 @@
 - [公式速查系统](docs/10-formula-cards.md)
 - [典型母题索引](docs/11-problem-archetypes.md)
 - [反例与失效边界库](docs/12-counterexamples.md)
+- [本地掌握图谱与自动复盘](docs/15-local-data.md)
 
 ## 获取完整版本
 
@@ -77,10 +79,11 @@ zensical build --clean
 
 1. 在 `docs/` 对应章节中增补内容。
 2. 给新增内容分配稳定编号，并补齐“条件—结论—边界—掌握证据”。
-3. 运行 `python -m unittest discover -s tests -p "test_*.py"` 和 `python scripts/validate_project.py` 检查结构、编号、引用、链接与公开数据边界。
-4. 运行 `python scripts/build_released_identities.py --check` 确认已发布 ID 未被删除或换用。
-5. 运行 `python scripts/build_bundle.py` 生成新的单文件 Markdown。
-6. 更新 `VERSION` 与 `CHANGELOG.md`，再提交 Pull Request 或创建新版本标签。
+3. 个人记录先运行 `python scripts/init_local_data.py`，只写入被 Git 忽略的 `data/local/`。
+4. 运行 `python -m unittest discover -s tests -p "test_*.py"` 和 `python scripts/validate_project.py` 检查结构、编号、引用、链接与公开数据边界。
+5. 运行 `python scripts/build_released_identities.py --check` 确认已发布 ID 未被删除或换用。
+6. 运行 `python scripts/check_bundle_deterministic.py` 生成单文件 Markdown，并确认构建可复现。
+7. 更新 `VERSION` 与 `CHANGELOG.md`，再提交 Pull Request 或创建新版本标签。
 
 详细规则见 [CONTRIBUTING.md](CONTRIBUTING.md) 与 [项目维护指南](docs/14-project-maintenance.md)。
 
@@ -89,8 +92,8 @@ zensical build --clean
 ```text
 .
 ├─ docs/                    # 可直接编辑、可发布成网站的分章节正文
-├─ releases/                # v1.0 / v1.1 / v1.2 / v1.2.1 历史快照
-├─ data/                    # 空白数据表与已发布稳定 ID 基线
+├─ releases/                # v1.0—v1.3 历史版本说明
+├─ data/                    # 空白模板、版本化 Schema、稳定 ID 与被忽略的 local 私层
 ├─ scripts/                 # 校验与单文件打包脚本
 ├─ tests/                   # 项目契约的正例与故障夹具
 ├─ .github/                 # Actions、Issue 表单和 PR 模板
@@ -104,7 +107,7 @@ zensical build --clean
 
 ## 内容说明
 
-本项目是复习框架与学习工具，不替代报考年度官方考试大纲。真题索引应优先记录年份、题号、考点和解法摘要，不上传未经授权的整套试卷扫描件或大段教材内容。
+本项目是复习框架与学习工具，不替代报考年度官方考试大纲。真题索引应优先记录年份、题号、考点和解法摘要，不上传未经授权的整套试卷扫描件或大段教材内容。个人成绩、用时、错题正文和掌握状态只进入 `data/local/`，不得加入 Git、Pages、Release 或 PR。
 
 ## 许可
 

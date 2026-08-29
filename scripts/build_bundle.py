@@ -23,6 +23,8 @@ ORDER = [
     "11-problem-archetypes.md",
     "12-counterexamples.md",
     "13-personal-links.md",
+    "14-project-maintenance.md",
+    "15-local-data.md",
 ]
 
 version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()

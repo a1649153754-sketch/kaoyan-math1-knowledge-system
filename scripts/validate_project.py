@@ -4,12 +4,15 @@ from __future__ import annotations
 import csv
 import json
 import re
+import subprocess
 import sys
 import tomllib
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import unquote
+
+from local_data import PRIVATE_COLUMNS, LocalDataError, load_contracts
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -32,6 +35,10 @@ REQUIRED_FILES = (
     "CITATION.cff",
     "zensical.toml",
     "data/released-identities.v1.json",
+    "data/schemas/v1/manifest.json",
+    "data/schemas/v1/progress.schema.json",
+    "data/schemas/v1/questions.schema.json",
+    "data/schemas/v1/errors.schema.json",
     "docs/index.md",
     "docs/00-overview.md",
     *TOPIC_FILES,
@@ -42,47 +49,8 @@ REQUIRED_FILES = (
     "docs/09-review-templates.md",
     *RESOURCE_FILES,
     "docs/14-project-maintenance.md",
+    "docs/15-local-data.md",
 )
-CSV_HEADERS = {
-    "data/progress.csv": (
-        "node_id",
-        "title",
-        "priority",
-        "level",
-        "last_review",
-        "next_review",
-        "status",
-        "evidence",
-        "notes",
-    ),
-    "data/questions.csv": (
-        "date",
-        "source",
-        "year",
-        "question_no",
-        "mother_id",
-        "node_ids",
-        "result",
-        "time_minutes",
-        "error_tags",
-        "next_review",
-        "notes",
-    ),
-    "data/errors.csv": (
-        "error_id",
-        "date",
-        "source",
-        "node_ids",
-        "mother_id",
-        "error_tag",
-        "summary",
-        "fix_action",
-        "next_review",
-        "status",
-        "notes",
-    ),
-}
-
 TOPIC_RE = re.compile(r"^-\s+([HLPM]\d+\.\d+)\s+(.+)$")
 CHAPTER_RE = re.compile(r"^##\s+([HLPM]\d+)\b")
 CHECKLIST_RE = re.compile(r"^-\s+\[ \]\s+([HLPM]\d+\.\d+-[a-z])\b")
@@ -372,22 +340,13 @@ def validate_released_identities(root: Path, catalog: Catalog) -> None:
         fail(f"released resource IDs changed namespace/type: {changed[:20]}")
 
 
-def validate_csv_templates(root: Path, catalog: Catalog) -> None:
-    forbidden_columns = {
-        "name",
-        "full_name",
-        "phone",
-        "mobile",
-        "email",
-        "school",
-        "wechat",
-        "qq",
-        "姓名",
-        "电话",
-        "邮箱",
-        "学校",
-    }
-    for relative, required_prefix in CSV_HEADERS.items():
+def validate_csv_templates(root: Path) -> str:
+    contracts = load_contracts(root)
+    versions = {contract.version for contract in contracts.values()}
+    if len(versions) != 1:
+        fail("public CSV schemas do not share one version")
+    for contract in contracts.values():
+        relative = contract.template
         path = root / relative
         if not path.exists() or path.stat().st_size == 0:
             fail(f"CSV template missing or empty: {relative}")
@@ -396,31 +355,52 @@ def validate_csv_templates(root: Path, catalog: Catalog) -> None:
         if not rows:
             fail(f"CSV template has no header: {relative}")
         header = tuple(rows[0])
-        if header[: len(required_prefix)] != required_prefix:
+        risky = PRIVATE_COLUMNS.intersection(field.casefold() for field in header)
+        if risky:
+            fail(f"public CSV template contains private identity columns {sorted(risky)}: {relative}")
+        if header != contract.header:
             fail(f"CSV header is not append-only compatible: {relative}")
         if len(header) != len(set(header)):
             fail(f"CSV header contains duplicate fields: {relative}")
-        risky = forbidden_columns.intersection(header)
-        if risky:
-            fail(f"public CSV template contains private identity columns {sorted(risky)}: {relative}")
-        for line_number, row in enumerate(rows[1:], 2):
-            if len(row) != len(header):
-                fail(f"CSV row width mismatch: {relative}:{line_number}")
-            values = dict(zip(header, row))
-            if values.get("node_id") and values["node_id"] not in catalog.topics:
-                fail(f"unknown node_id {values['node_id']}: {relative}:{line_number}")
-            for topic_id in filter(None, (item.strip() for item in values.get("node_ids", "").split(";"))):
-                if topic_id not in catalog.topics:
-                    fail(f"unknown node_ids entry {topic_id}: {relative}:{line_number}")
-            mother_id = values.get("mother_id", "").strip()
-            if mother_id and (mother_id not in catalog.resources or not mother_id.startswith("Q-")):
-                fail(f"unknown mother_id {mother_id}: {relative}:{line_number}")
+        if len(rows) != 1:
+            fail(f"public CSV template must be header-only: {relative}")
+    return versions.pop()
+
+
+def validate_private_layer(root: Path) -> None:
+    ignore_lines = {
+        line.strip()
+        for line in read_text(root, ".gitignore").splitlines()
+        if line.strip() and not line.lstrip().startswith("#")
+    }
+    required = {"data/local/*", "!data/local/.gitkeep"}
+    if not required.issubset(ignore_lines):
+        fail(".gitignore must ignore data/local/* and retain only data/local/.gitkeep")
+    keep = root / "data" / "local" / ".gitkeep"
+    if not keep.exists():
+        fail("data/local/.gitkeep is missing")
+
+    if (root / ".git").exists():
+        result = subprocess.run(
+            ["git", "-C", str(root), "ls-files", "--", "data/local"],
+            check=False,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+        )
+        if result.returncode != 0:
+            fail(f"cannot inspect tracked local data: {result.stderr.strip()}")
+        tracked = [line.strip().replace("\\", "/") for line in result.stdout.splitlines() if line.strip()]
+        leaked = [path for path in tracked if path != "data/local/.gitkeep"]
+        if leaked:
+            fail(f"private local data is tracked by Git: {leaked}")
 
 
 def validate_local_links(root: Path) -> None:
     excluded_parts = {".git", ".venv", "site", "dist"}
     for markdown_file in sorted(root.rglob("*.md")):
-        if excluded_parts.intersection(markdown_file.relative_to(root).parts):
+        parts = markdown_file.relative_to(root).parts
+        if excluded_parts.intersection(parts) or parts[:2] == ("data", "local"):
             continue
         relative = markdown_file.relative_to(root).as_posix()
         text = markdown_file.read_text(encoding="utf-8").lstrip("\ufeff")
@@ -467,7 +447,8 @@ def validate_project(root: Path = ROOT) -> dict[str, object]:
     catalog = collect_catalog(root)
     validate_resource_references(catalog)
     validate_released_identities(root, catalog)
-    validate_csv_templates(root, catalog)
+    data_schema_version = validate_csv_templates(root)
+    validate_private_layer(root)
     validate_local_links(root)
     version = validate_release_metadata(root)
     resource_counts = Counter(row.kind for row in catalog.resources.values())
@@ -478,6 +459,7 @@ def validate_project(root: Path = ROOT) -> dict[str, object]:
         "checklistItems": len(catalog.checklist_items),
         "resources": len(catalog.resources),
         "resourceCounts": dict(sorted(resource_counts.items())),
+        "dataSchemaVersion": data_schema_version,
         "unresolvedResourceMentions": 0,
     }
 
@@ -485,7 +467,7 @@ def validate_project(root: Path = ROOT) -> dict[str, object]:
 def main() -> int:
     try:
         stats = validate_project(ROOT)
-    except (OSError, ProjectValidationError, tomllib.TOMLDecodeError) as error:
+    except (OSError, LocalDataError, ProjectValidationError, tomllib.TOMLDecodeError) as error:
         print(f"ERROR: {error}", file=sys.stderr)
         return 1
     print("Project validation passed")
@@ -494,6 +476,7 @@ def main() -> int:
     print(f"  formal knowledge nodes:      {stats['knowledgeNodes']}")
     print(f"  checklist items:             {stats['checklistItems']}")
     print(f"  resources:                   {stats['resources']} {stats['resourceCounts']}")
+    print(f"  public data schema:          {stats['dataSchemaVersion']} (header-only templates)")
     print(f"  unresolved resource mentions:{stats['unresolvedResourceMentions']}")
     return 0
 

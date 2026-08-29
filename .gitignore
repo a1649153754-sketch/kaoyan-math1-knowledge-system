@@ -16,6 +16,8 @@ Thumbs.db
 # Personal/private data exports
 private/
 data/private-*.csv
+data/local/*
+!data/local/.gitkeep
 
 # Generated publication artifacts
 dist/

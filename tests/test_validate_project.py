@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -9,6 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
+from local_data import LocalDataError  # noqa: E402
 from validate_project import ProjectValidationError, validate_project  # noqa: E402
 
 
@@ -32,7 +34,7 @@ class ProjectContractTests(unittest.TestCase):
         path.write_text(content.replace(old, new, 1), encoding="utf-8", newline="\n")
 
     def assert_invalid(self, expected: str) -> None:
-        with self.assertRaises(ProjectValidationError) as context:
+        with self.assertRaises((LocalDataError, ProjectValidationError)) as context:
             validate_project(self.repo)
         self.assertIn(expected, str(context.exception))
 
@@ -41,6 +43,7 @@ class ProjectContractTests(unittest.TestCase):
         self.assertEqual(stats["knowledgeNodes"], 253)
         self.assertEqual(stats["checklistItems"], 321)
         self.assertEqual(stats["resources"], 332)
+        self.assertEqual(stats["dataSchemaVersion"], "1.0.0")
         self.assertEqual(stats["unresolvedResourceMentions"], 0)
 
     def test_dangling_resource_topic_is_rejected(self) -> None:
@@ -91,6 +94,41 @@ class ProjectContractTests(unittest.TestCase):
         rows = path.read_text(encoding="utf-8").splitlines()
         path.write_text("\n".join(f"{row},email" for row in rows) + "\n", encoding="utf-8", newline="\n")
         self.assert_invalid("public CSV template contains private identity columns")
+
+    def test_public_csv_data_row_is_rejected(self) -> None:
+        path = self.repo / "data/progress.csv"
+        header = path.read_text(encoding="utf-8").strip().split(",")
+        path.write_text(
+            ",".join(header) + "\n" + ",".join("" for _ in header) + "\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+        self.assert_invalid("public CSV template must be header-only")
+
+    def test_schema_cannot_break_legacy_prefix(self) -> None:
+        self.replace(
+            "data/schemas/v1/progress.schema.json",
+            '"node_id", "title", "priority", "level"',
+            '"title", "node_id", "priority", "level"',
+        )
+        self.assert_invalid("legacy header is not a prefix")
+
+    def test_tracked_local_private_file_is_rejected(self) -> None:
+        subprocess.run(["git", "init", "--quiet", str(self.repo)], check=True)
+        private_file = self.repo / "data/local/progress-private.csv"
+        private_file.write_text("node_id,score\nH1.5,42\n", encoding="utf-8", newline="\n")
+        subprocess.run(
+            ["git", "-C", str(self.repo), "add", "-f", "data/local/progress-private.csv"],
+            check=True,
+        )
+        self.assert_invalid("private local data is tracked by Git")
+
+    def test_untracked_local_reports_do_not_affect_public_validation(self) -> None:
+        report = self.repo / "data/local/reports/weekly-review.md"
+        report.parent.mkdir(parents=True, exist_ok=True)
+        report.write_text("[private broken link](missing.md)\n/mnt/data/private\n", encoding="utf-8")
+        stats = validate_project(self.repo)
+        self.assertEqual(stats["dataSchemaVersion"], "1.0.0")
 
 
 if __name__ == "__main__":
