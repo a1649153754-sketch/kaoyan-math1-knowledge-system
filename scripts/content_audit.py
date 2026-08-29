@@ -6,7 +6,21 @@ import re
 from pathlib import Path
 
 AUDITED_CHAPTERS = {
-    "H2": {"file": "docs/01-calculus.md", "nodes": tuple(f"H2.{number}" for number in range(1, 11))},
+    "H2": {
+        "file": "docs/01-calculus.md",
+        "nodes": tuple(f"H2.{number}" for number in range(1, 11)),
+        "explanations": (),
+    },
+    "H3": {
+        "file": "docs/01-calculus.md",
+        "nodes": tuple(f"H3.{number}" for number in range(1, 12)),
+        "explanations": (
+            "核心讲解一：换元与分部为什么有效",
+            "核心讲解二：定积分与导数为什么互逆",
+            "核心讲解三：反常积分先判极限，再谈计算",
+            "核心讲解四：应用题统一成“强度 × 微元”",
+        ),
+    },
 }
 REQUIRED_FIELDS = ("触发信号", "适用条件", "执行动作", "失效边界", "母题证据", "来源")
 CARD_HEADER_RE = re.compile(r"^####\s+([HLPM]\d+\.\d+)\s+(.+)$")
@@ -108,4 +122,17 @@ def validate_content_audits(root: Path) -> dict[str, object]:
             if not any(source_id.startswith("E-") for source_id in source_ids):
                 fail(f"execution card has no evidence source: {node_id}")
             audited_nodes += 1
+        for heading in config["explanations"]:
+            marker = f"### {heading}"
+            try:
+                start = section.index(marker)
+            except ValueError:
+                fail(f"required detailed explanation missing in {chapter}: {heading}")
+            end = next(
+                (index for index in range(start + 1, len(section)) if section[index].startswith("### ")),
+                len(section),
+            )
+            explanation = "\n".join(section[start + 1 : end]).strip()
+            if len(explanation) < 400:
+                fail(f"detailed explanation is too short in {chapter}: {heading}")
     return {"auditedChapters": sorted(AUDITED_CHAPTERS), "auditedNodes": audited_nodes}

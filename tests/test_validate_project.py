@@ -47,7 +47,8 @@ class ProjectContractTests(unittest.TestCase):
         self.assertEqual(stats["resources"], 332)
         self.assertEqual(stats["dataSchemaVersion"], "1.0.0")
         self.assertEqual(stats["examEvidence"]["officialQuestions"], 385)
-        self.assertEqual(stats["contentAudit"]["auditedNodes"], 10)
+        self.assertEqual(stats["contentAudit"]["auditedNodes"], 21)
+        self.assertEqual(stats["mathRendering"], {"engine": "MathJax 3", "arithmatex": True})
         self.assertEqual(stats["unresolvedResourceMentions"], 0)
 
     def test_dangling_resource_topic_is_rejected(self) -> None:
@@ -88,6 +89,14 @@ class ProjectContractTests(unittest.TestCase):
             newline="\n",
         )
         self.assert_invalid("broken local link")
+
+    def test_disabled_arithmatex_is_rejected(self) -> None:
+        self.replace(
+            "zensical.toml",
+            "pymdownx.arithmatex.generic = true",
+            "pymdownx.arithmatex.generic = false",
+        )
+        self.assert_invalid("Zensical math rendering requires pymdownx.arithmatex.generic = true")
 
     def test_incompatible_csv_header_is_rejected(self) -> None:
         self.replace("data/progress.csv", "node_id,title,priority", "title,node_id,priority")
