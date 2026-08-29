@@ -45,18 +45,21 @@
 python -m unittest discover -s tests -p "test_*.py"
 python scripts/validate_project.py
 python scripts/build_released_identities.py --check
+python scripts/build_exam_evidence_indexes.py --check
 python scripts/check_bundle_deterministic.py
 
-# 2. 修改 VERSION，例如 1.3.0
+# 2. 修改 VERSION，例如 1.4.0
 python scripts/check_bundle_deterministic.py
 
 # 3. 更新 CHANGELOG.md
-# 4. 提交、合并并创建 v1.3.0 标签
+# 4. 提交、合并并创建 v1.4.0 标签
 ```
 
 `build_bundle.py` 会读取 `VERSION`，把分章节正文合并到 `dist/`。确认内容无误后，将单文件 Markdown、Word、PDF 或压缩包作为 GitHub Release 资产发布；`releases/vX.Y/` 只保留版本说明与必要元数据。
 
 只有在正式发布新增 ID 时，才运行 `python scripts/build_released_identities.py --snapshot-version <版本>` 更新稳定身份基线；普通内容修订不得改写该文件。
+
+真题证据公开边界、确定性导入和反向索引维护见[真题证据索引](16-exam-evidence-index.md)。导入器只读取本地私有下游；公开仓库不得保存下游路径、题面、答案或解析。
 
 ## 六、推荐的分支和提交方式
 

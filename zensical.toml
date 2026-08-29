@@ -38,6 +38,7 @@ nav = [
     { "个人疑问挂接" = "13-personal-links.md" },
     { "项目维护指南" = "14-project-maintenance.md" },
     { "本地掌握图谱" = "15-local-data.md" },
+    { "真题证据索引" = "16-exam-evidence-index.md" },
   ] },
 ]
 

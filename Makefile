@@ -1,4 +1,4 @@
-.PHONY: install serve build test validate identities local-init local-validate local-report bundle bundle-check clean
+.PHONY: install serve build test validate identities exam-index-check local-init local-validate local-report bundle bundle-check clean
 
 install:
 	python -m pip install -r requirements.txt
@@ -17,6 +17,9 @@ test:
 
 identities:
 	python scripts/build_released_identities.py --check
+
+exam-index-check:
+	python scripts/build_exam_evidence_indexes.py --check
 
 local-init:
 	python scripts/init_local_data.py

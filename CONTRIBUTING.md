@@ -33,7 +33,7 @@
 
 ## 版权与来源
 
-可以记录真题的年份、题号、考点、解法摘要和少量必要题干信息。请勿提交整套试卷扫描件、付费讲义、教材大段原文或其他未经授权的内容。
+正式卷公开索引只记录年份、题号、题型、分值、知识节点、母题、难度与简短路线标签。请勿向 `data/exam-evidence/` 写入完整题面、答案、解析、图形、来源文件或本地路径；模拟卷不得公开卷名、机构或逐题身份。请勿提交整套试卷扫描件、付费讲义、教材大段原文或其他未经授权的内容。
 
 ## 提交流程
 
@@ -45,6 +45,7 @@
 python -m unittest discover -s tests -p "test_*.py"
 python scripts/validate_project.py
 python scripts/build_released_identities.py --check
+python scripts/build_exam_evidence_indexes.py --check
 python scripts/check_bundle_deterministic.py
 zensical build --clean
 ```

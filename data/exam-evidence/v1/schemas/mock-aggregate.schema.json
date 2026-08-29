@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/a1649153754-sketch/kaoyan-math1-knowledge-system/main/data/exam-evidence/v1/schemas/mock-aggregate.schema.json",
+  "title": "Anonymous aggregate metadata for Math I mock papers",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema", "schemaVersion", "privacyMode", "itemLevelPublished", "suppressionThreshold",
+    "paperCount", "questionCount", "totalMarks", "years", "bySubject", "byQuestionType",
+    "difficulty", "topNodes", "topMothers", "rightsBoundary"
+  ],
+  "properties": {
+    "$schema": {"const": "kaoyan-math1/exam-evidence/mock-aggregate@1"},
+    "schemaVersion": {"const": "1.0.0"},
+    "privacyMode": {"const": "anonymous-aggregate-only"},
+    "itemLevelPublished": {"const": false},
+    "suppressionThreshold": {"type": "integer", "minimum": 5},
+    "paperCount": {"type": "integer", "minimum": 1},
+    "questionCount": {"type": "integer", "minimum": 1},
+    "totalMarks": {"type": "number", "minimum": 1},
+    "years": {"type": "array", "items": {"type": "integer"}, "uniqueItems": true},
+    "bySubject": {"type": "array", "items": {"$ref": "#/$defs/group"}},
+    "byQuestionType": {"type": "array", "items": {"$ref": "#/$defs/group"}},
+    "difficulty": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum", "maximum", "mean", "bands"],
+      "properties": {
+        "minimum": {"type": "integer", "minimum": 0, "maximum": 100},
+        "maximum": {"type": "integer", "minimum": 0, "maximum": 100},
+        "mean": {"type": "number", "minimum": 0, "maximum": 100},
+        "bands": {"type": "array", "items": {"$ref": "#/$defs/count"}}
+      }
+    },
+    "topNodes": {"type": "array", "items": {"$ref": "#/$defs/nodeCount"}},
+    "topMothers": {"type": "array", "items": {"$ref": "#/$defs/motherCount"}},
+    "rightsBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "note"],
+      "properties": {
+        "mode": {"const": "anonymous-aggregate-only"},
+        "note": {"type": "string", "minLength": 1}
+      }
+    }
+  },
+  "$defs": {
+    "group": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "questionCount", "totalMarks", "meanDifficulty100"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "questionCount": {"type": "integer", "minimum": 1},
+        "totalMarks": {"type": "number", "minimum": 1},
+        "meanDifficulty100": {"type": "number", "minimum": 0, "maximum": 100}
+      }
+    },
+    "count": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "questionCount"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "questionCount": {"type": "integer", "minimum": 1}
+      }
+    },
+    "nodeCount": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nodeId", "questionCount"],
+      "properties": {
+        "nodeId": {"type": "string", "pattern": "^[HLPM][0-9]+\\.[0-9]+$"},
+        "questionCount": {"type": "integer", "minimum": 5}
+      }
+    },
+    "motherCount": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["motherId", "questionCount"],
+      "properties": {
+        "motherId": {"type": "string", "pattern": "^Q-[HLP][0-9]{2}$"},
+        "questionCount": {"type": "integer", "minimum": 5}
+      }
+    }
+  }
+}

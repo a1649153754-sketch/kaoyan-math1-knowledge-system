@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from local_data import LocalDataError  # noqa: E402
+from exam_evidence import ExamEvidenceError  # noqa: E402
 from validate_project import ProjectValidationError, validate_project  # noqa: E402
 
 
@@ -34,7 +35,7 @@ class ProjectContractTests(unittest.TestCase):
         path.write_text(content.replace(old, new, 1), encoding="utf-8", newline="\n")
 
     def assert_invalid(self, expected: str) -> None:
-        with self.assertRaises((LocalDataError, ProjectValidationError)) as context:
+        with self.assertRaises((ExamEvidenceError, LocalDataError, ProjectValidationError)) as context:
             validate_project(self.repo)
         self.assertIn(expected, str(context.exception))
 
@@ -44,6 +45,7 @@ class ProjectContractTests(unittest.TestCase):
         self.assertEqual(stats["checklistItems"], 321)
         self.assertEqual(stats["resources"], 332)
         self.assertEqual(stats["dataSchemaVersion"], "1.0.0")
+        self.assertEqual(stats["examEvidence"]["officialQuestions"], 385)
         self.assertEqual(stats["unresolvedResourceMentions"], 0)
 
     def test_dangling_resource_topic_is_rejected(self) -> None:

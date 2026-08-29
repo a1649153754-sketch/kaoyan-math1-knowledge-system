@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/a1649153754-sketch/kaoyan-math1-knowledge-system/main/data/exam-evidence/v1/schemas/official-questions.schema.json",
+  "title": "Math I official exam evidence metadata",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schemaVersion", "scope", "rightsBoundary", "papers"],
+  "properties": {
+    "$schema": {"const": "kaoyan-math1/exam-evidence/official-questions@1"},
+    "schemaVersion": {"const": "1.0.0"},
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["startYear", "endYear", "paperCount", "questionCount", "totalMarks"],
+      "properties": {
+        "startYear": {"const": 2010},
+        "endYear": {"const": 2026},
+        "paperCount": {"const": 17},
+        "questionCount": {"type": "integer", "minimum": 1},
+        "totalMarks": {"type": "number", "minimum": 1}
+      }
+    },
+    "rightsBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "includedFields", "excludedFields", "note"],
+      "properties": {
+        "mode": {"const": "metadata-only"},
+        "includedFields": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true},
+        "excludedFields": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true},
+        "note": {"type": "string", "minLength": 1}
+      }
+    },
+    "papers": {
+      "type": "array",
+      "minItems": 17,
+      "maxItems": 17,
+      "items": {"$ref": "#/$defs/paper"}
+    }
+  },
+  "$defs": {
+    "nodeId": {"type": "string", "pattern": "^[HLPM][0-9]+\\.[0-9]+$"},
+    "motherId": {"type": "string", "pattern": "^Q-[HLP][0-9]{2}$"},
+    "question": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "year", "no", "type", "score", "subject", "difficulty100", "difficultyBand",
+        "nodeIds", "coreNodeIds", "supportNodeIds", "primaryMotherId", "auxiliaryMotherIds",
+        "routeLabel", "errorCauseTags"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^20[0-9]{2}-M1-Q[0-9]{2}$"},
+        "year": {"type": "integer", "minimum": 2010, "maximum": 2026},
+        "no": {"type": "integer", "minimum": 1},
+        "type": {"enum": ["选择题", "填空题", "解答题"]},
+        "score": {"type": "number", "exclusiveMinimum": 0},
+        "subject": {"enum": ["高等数学", "线性代数", "概率论"]},
+        "difficulty100": {"type": "integer", "minimum": 0, "maximum": 100},
+        "difficultyBand": {"type": "string", "minLength": 1},
+        "nodeIds": {"type": "array", "items": {"$ref": "#/$defs/nodeId"}, "minItems": 1, "uniqueItems": true},
+        "coreNodeIds": {"type": "array", "items": {"$ref": "#/$defs/nodeId"}, "minItems": 1, "uniqueItems": true},
+        "supportNodeIds": {"type": "array", "items": {"$ref": "#/$defs/nodeId"}, "uniqueItems": true},
+        "primaryMotherId": {"$ref": "#/$defs/motherId"},
+        "auxiliaryMotherIds": {"type": "array", "items": {"$ref": "#/$defs/motherId"}, "maxItems": 2, "uniqueItems": true},
+        "routeLabel": {"type": "string", "minLength": 1, "maxLength": 48},
+        "errorCauseTags": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["route-choice", "calculation", "knowledge-connection", "condition-check", "route-coupling"]}
+        }
+      }
+    },
+    "paper": {
+      "type": "object",
+      "required": ["year", "status", "boundaryNote", "questionCount", "totalScore", "questions"],
+      "properties": {
+        "year": {"type": "integer", "minimum": 2010, "maximum": 2026},
+        "status": {"enum": ["official-archive", "reconstructed"]},
+        "boundaryNote": {"type": "string", "minLength": 1},
+        "questionCount": {"type": "integer", "minimum": 1},
+        "totalScore": {"type": "number", "minimum": 1},
+        "officialOriginalAvailable": {"type": "boolean"},
+        "officialAnswerAvailable": {"type": "boolean"},
+        "questions": {"type": "array", "items": {"$ref": "#/$defs/question"}, "minItems": 1}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"year": {"const": 2026}}, "required": ["year"]},
+          "then": {
+            "required": ["officialOriginalAvailable", "officialAnswerAvailable"],
+            "properties": {
+              "status": {"const": "reconstructed"},
+              "officialOriginalAvailable": {"const": false},
+              "officialAnswerAvailable": {"const": false}
+            }
+          },
+          "else": {
+            "properties": {"status": {"const": "official-archive"}},
+            "not": {"anyOf": [{"required": ["officialOriginalAvailable"]}, {"required": ["officialAnswerAvailable"]}]}
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    }
+  }
+}
