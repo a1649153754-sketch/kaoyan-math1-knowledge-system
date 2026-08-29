@@ -36,6 +36,7 @@ REQUIRED_FILES = (
     "CHANGELOG.md",
     "CITATION.cff",
     "zensical.toml",
+    "docs/javascripts/mathjax.js",
     "data/released-identities.v1.json",
     "data/schemas/v1/manifest.json",
     "data/schemas/v1/progress.schema.json",
@@ -129,6 +130,38 @@ def validate_required_files(root: Path) -> None:
         path = root / relative
         if not path.exists() or path.stat().st_size == 0:
             fail(f"required file missing or empty: {relative}")
+
+
+def validate_math_rendering(root: Path) -> dict[str, object]:
+    config = tomllib.loads(read_text(root, "zensical.toml"))
+    project = config.get("project", {})
+    if not isinstance(project, dict):
+        fail("zensical project configuration must be a table")
+
+    extensions = project.get("markdown_extensions", {})
+    try:
+        arithmatex_enabled = extensions["pymdownx"]["arithmatex"]["generic"] is True
+    except (KeyError, TypeError):
+        arithmatex_enabled = False
+    if not arithmatex_enabled:
+        fail("Zensical math rendering requires pymdownx.arithmatex.generic = true")
+
+    scripts = project.get("extra_javascript", [])
+    if not isinstance(scripts, list):
+        fail("Zensical extra_javascript must be an array")
+    if "javascripts/mathjax.js" not in scripts:
+        fail("Zensical math rendering is missing javascripts/mathjax.js")
+    if not any(
+        isinstance(script, str) and "mathjax@3" in script and script.endswith("tex-mml-chtml.js")
+        for script in scripts
+    ):
+        fail("Zensical math rendering is missing the MathJax 3 browser bundle")
+
+    setup = read_text(root, "docs/javascripts/mathjax.js")
+    for token in ("window.MathJax", "document$.subscribe", "MathJax.typesetPromise"):
+        if token not in setup:
+            fail(f"MathJax setup is incomplete: missing {token}")
+    return {"engine": "MathJax 3", "arithmatex": True}
 
 
 def collect_topics(root: Path) -> tuple[set[str], dict[str, str]]:
@@ -447,6 +480,7 @@ def validate_project(root: Path = ROOT) -> dict[str, object]:
     root = root.resolve()
     validate_required_files(root)
     validate_navigation(root)
+    math_rendering = validate_math_rendering(root)
     catalog = collect_catalog(root)
     validate_resource_references(catalog)
     validate_released_identities(root, catalog)
@@ -467,6 +501,7 @@ def validate_project(root: Path = ROOT) -> dict[str, object]:
         "dataSchemaVersion": data_schema_version,
         "examEvidence": exam_evidence,
         "contentAudit": content_audit,
+        "mathRendering": math_rendering,
         "unresolvedResourceMentions": 0,
     }
 
@@ -502,6 +537,10 @@ def main() -> int:
     print(
         "  audited execution cards:     "
         f"{stats['contentAudit']['auditedNodes']} nodes in {stats['contentAudit']['auditedChapters']}"
+    )
+    print(
+        "  math rendering:              "
+        f"{stats['mathRendering']['engine']} / Arithmatex={stats['mathRendering']['arithmatex']}"
     )
     print(f"  unresolved resource mentions:{stats['unresolvedResourceMentions']}")
     return 0
