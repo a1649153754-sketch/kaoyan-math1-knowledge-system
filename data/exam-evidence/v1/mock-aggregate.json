@@ -1,0 +1,836 @@
+{
+  "$schema": "kaoyan-math1/exam-evidence/mock-aggregate@1",
+  "schemaVersion": "1.0.0",
+  "privacyMode": "anonymous-aggregate-only",
+  "itemLevelPublished": false,
+  "suppressionThreshold": 5,
+  "paperCount": 28,
+  "questionCount": 616,
+  "totalMarks": 4200,
+  "years": [
+    2026
+  ],
+  "bySubject": [
+    {
+      "name": "概率论",
+      "questionCount": 140,
+      "totalMarks": 896,
+      "meanDifficulty100": 43.01
+    },
+    {
+      "name": "线性代数",
+      "questionCount": 140,
+      "totalMarks": 896,
+      "meanDifficulty100": 49.79
+    },
+    {
+      "name": "高等数学",
+      "questionCount": 336,
+      "totalMarks": 2408,
+      "meanDifficulty100": 46.58
+    }
+  ],
+  "byQuestionType": [
+    {
+      "name": "填空题",
+      "questionCount": 168,
+      "totalMarks": 840,
+      "meanDifficulty100": 41.85
+    },
+    {
+      "name": "解答题",
+      "questionCount": 168,
+      "totalMarks": 1960,
+      "meanDifficulty100": 57.68
+    },
+    {
+      "name": "选择题",
+      "questionCount": 280,
+      "totalMarks": 1400,
+      "meanDifficulty100": 42.57
+    }
+  ],
+  "difficulty": {
+    "minimum": 22,
+    "maximum": 86,
+    "mean": 46.5,
+    "bands": [
+      {
+        "name": "中等",
+        "questionCount": 186
+      },
+      {
+        "name": "偏难",
+        "questionCount": 41
+      },
+      {
+        "name": "基础",
+        "questionCount": 97
+      },
+      {
+        "name": "极难",
+        "questionCount": 1
+      },
+      {
+        "name": "标准",
+        "questionCount": 285
+      },
+      {
+        "name": "高难",
+        "questionCount": 6
+      }
+    ]
+  },
+  "topNodes": [
+    {
+      "nodeId": "H3.6",
+      "questionCount": 22
+    },
+    {
+      "nodeId": "H6.3",
+      "questionCount": 22
+    },
+    {
+      "nodeId": "H1.3",
+      "questionCount": 19
+    },
+    {
+      "nodeId": "H2.6",
+      "questionCount": 19
+    },
+    {
+      "nodeId": "P2.4",
+      "questionCount": 19
+    },
+    {
+      "nodeId": "H2.4",
+      "questionCount": 17
+    },
+    {
+      "nodeId": "H3.5",
+      "questionCount": 17
+    },
+    {
+      "nodeId": "H3.7",
+      "questionCount": 17
+    },
+    {
+      "nodeId": "L2.8",
+      "questionCount": 17
+    },
+    {
+      "nodeId": "L6.6",
+      "questionCount": 17
+    },
+    {
+      "nodeId": "P2.5",
+      "questionCount": 17
+    },
+    {
+      "nodeId": "P4.2",
+      "questionCount": 17
+    },
+    {
+      "nodeId": "H2.5",
+      "questionCount": 16
+    },
+    {
+      "nodeId": "H6.2",
+      "questionCount": 16
+    },
+    {
+      "nodeId": "H6.7",
+      "questionCount": 16
+    },
+    {
+      "nodeId": "H2.7",
+      "questionCount": 15
+    },
+    {
+      "nodeId": "H8.6",
+      "questionCount": 15
+    },
+    {
+      "nodeId": "P7.3",
+      "questionCount": 15
+    },
+    {
+      "nodeId": "H1.6",
+      "questionCount": 14
+    },
+    {
+      "nodeId": "P4.4",
+      "questionCount": 14
+    },
+    {
+      "nodeId": "H8.7",
+      "questionCount": 13
+    },
+    {
+      "nodeId": "H9.2",
+      "questionCount": 13
+    },
+    {
+      "nodeId": "L3.2",
+      "questionCount": 13
+    },
+    {
+      "nodeId": "H1.1",
+      "questionCount": 12
+    },
+    {
+      "nodeId": "L4.6",
+      "questionCount": 12
+    },
+    {
+      "nodeId": "L5.6",
+      "questionCount": 12
+    },
+    {
+      "nodeId": "H1.5",
+      "questionCount": 11
+    },
+    {
+      "nodeId": "H3.8",
+      "questionCount": 11
+    },
+    {
+      "nodeId": "H4.2",
+      "questionCount": 11
+    },
+    {
+      "nodeId": "H7.2",
+      "questionCount": 11
+    },
+    {
+      "nodeId": "H8.2",
+      "questionCount": 11
+    },
+    {
+      "nodeId": "L2.7",
+      "questionCount": 11
+    },
+    {
+      "nodeId": "L3.1",
+      "questionCount": 11
+    },
+    {
+      "nodeId": "L6.1",
+      "questionCount": 11
+    },
+    {
+      "nodeId": "H4.4",
+      "questionCount": 10
+    },
+    {
+      "nodeId": "H6.5",
+      "questionCount": 10
+    },
+    {
+      "nodeId": "L2.4",
+      "questionCount": 10
+    },
+    {
+      "nodeId": "L5.1",
+      "questionCount": 10
+    },
+    {
+      "nodeId": "L5.2",
+      "questionCount": 10
+    },
+    {
+      "nodeId": "L5.4",
+      "questionCount": 10
+    },
+    {
+      "nodeId": "L5.7",
+      "questionCount": 10
+    },
+    {
+      "nodeId": "P1.4",
+      "questionCount": 10
+    },
+    {
+      "nodeId": "H3.3",
+      "questionCount": 9
+    },
+    {
+      "nodeId": "H3.9",
+      "questionCount": 9
+    },
+    {
+      "nodeId": "H7.3",
+      "questionCount": 9
+    },
+    {
+      "nodeId": "H9.4",
+      "questionCount": 9
+    },
+    {
+      "nodeId": "L6.4",
+      "questionCount": 9
+    },
+    {
+      "nodeId": "P1.1",
+      "questionCount": 9
+    },
+    {
+      "nodeId": "P1.6",
+      "questionCount": 9
+    },
+    {
+      "nodeId": "P3.4",
+      "questionCount": 9
+    },
+    {
+      "nodeId": "P4.3",
+      "questionCount": 9
+    },
+    {
+      "nodeId": "P6.3",
+      "questionCount": 9
+    },
+    {
+      "nodeId": "H0.2",
+      "questionCount": 8
+    },
+    {
+      "nodeId": "H8.4",
+      "questionCount": 8
+    },
+    {
+      "nodeId": "H9.7",
+      "questionCount": 8
+    },
+    {
+      "nodeId": "L2.6",
+      "questionCount": 8
+    },
+    {
+      "nodeId": "L4.4",
+      "questionCount": 8
+    },
+    {
+      "nodeId": "L6.3",
+      "questionCount": 8
+    },
+    {
+      "nodeId": "L7.2",
+      "questionCount": 8
+    },
+    {
+      "nodeId": "L7.3",
+      "questionCount": 8
+    },
+    {
+      "nodeId": "P2.3",
+      "questionCount": 8
+    },
+    {
+      "nodeId": "P2.6",
+      "questionCount": 8
+    },
+    {
+      "nodeId": "P3.5",
+      "questionCount": 8
+    },
+    {
+      "nodeId": "H0.5",
+      "questionCount": 7
+    },
+    {
+      "nodeId": "H1.4",
+      "questionCount": 7
+    },
+    {
+      "nodeId": "H2.1",
+      "questionCount": 7
+    },
+    {
+      "nodeId": "H2.8",
+      "questionCount": 7
+    },
+    {
+      "nodeId": "H2.9",
+      "questionCount": 7
+    },
+    {
+      "nodeId": "H3.10",
+      "questionCount": 7
+    },
+    {
+      "nodeId": "H9.5",
+      "questionCount": 7
+    },
+    {
+      "nodeId": "L3.5",
+      "questionCount": 7
+    },
+    {
+      "nodeId": "L4.2",
+      "questionCount": 7
+    },
+    {
+      "nodeId": "M5.1",
+      "questionCount": 7
+    },
+    {
+      "nodeId": "P1.2",
+      "questionCount": 7
+    },
+    {
+      "nodeId": "P3.7",
+      "questionCount": 7
+    },
+    {
+      "nodeId": "P3.8",
+      "questionCount": 7
+    },
+    {
+      "nodeId": "P4.1",
+      "questionCount": 7
+    },
+    {
+      "nodeId": "P4.5",
+      "questionCount": 7
+    },
+    {
+      "nodeId": "P7.4",
+      "questionCount": 7
+    },
+    {
+      "nodeId": "H0.4",
+      "questionCount": 6
+    },
+    {
+      "nodeId": "H3.2",
+      "questionCount": 6
+    },
+    {
+      "nodeId": "H4.6",
+      "questionCount": 6
+    },
+    {
+      "nodeId": "H5.5",
+      "questionCount": 6
+    },
+    {
+      "nodeId": "H5.6",
+      "questionCount": 6
+    },
+    {
+      "nodeId": "H6.4",
+      "questionCount": 6
+    },
+    {
+      "nodeId": "H7.4",
+      "questionCount": 6
+    },
+    {
+      "nodeId": "H8.5",
+      "questionCount": 6
+    },
+    {
+      "nodeId": "H9.6",
+      "questionCount": 6
+    },
+    {
+      "nodeId": "H9.8",
+      "questionCount": 6
+    },
+    {
+      "nodeId": "L1.5",
+      "questionCount": 6
+    },
+    {
+      "nodeId": "L2.3",
+      "questionCount": 6
+    },
+    {
+      "nodeId": "L7.5",
+      "questionCount": 6
+    },
+    {
+      "nodeId": "P3.3",
+      "questionCount": 6
+    },
+    {
+      "nodeId": "P3.9",
+      "questionCount": 6
+    },
+    {
+      "nodeId": "P4.7",
+      "questionCount": 6
+    },
+    {
+      "nodeId": "H1.7",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "H2.2",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "H3.1",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "H3.4",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "H4.9",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "H6.6",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "H6.8",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "H7.7",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "H7.9",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "H8.1",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "H9.1",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "H9.3",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "H9.9",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "L1.4",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "L2.1",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "L3.4",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "L6.2",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "L6.5",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "L7.6",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "P1.7",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "P2.1",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "P3.6",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "P4.6",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "P4.8",
+      "questionCount": 5
+    },
+    {
+      "nodeId": "P6.2",
+      "questionCount": 5
+    }
+  ],
+  "topMothers": [
+    {
+      "motherId": "Q-H02",
+      "questionCount": 71
+    },
+    {
+      "motherId": "Q-H18",
+      "questionCount": 57
+    },
+    {
+      "motherId": "Q-H13",
+      "questionCount": 52
+    },
+    {
+      "motherId": "Q-H10",
+      "questionCount": 49
+    },
+    {
+      "motherId": "Q-H27",
+      "questionCount": 48
+    },
+    {
+      "motherId": "Q-L07",
+      "questionCount": 48
+    },
+    {
+      "motherId": "Q-H20",
+      "questionCount": 47
+    },
+    {
+      "motherId": "Q-H09",
+      "questionCount": 45
+    },
+    {
+      "motherId": "Q-P10",
+      "questionCount": 45
+    },
+    {
+      "motherId": "Q-P04",
+      "questionCount": 43
+    },
+    {
+      "motherId": "Q-L04",
+      "questionCount": 42
+    },
+    {
+      "motherId": "Q-H01",
+      "questionCount": 39
+    },
+    {
+      "motherId": "Q-H31",
+      "questionCount": 36
+    },
+    {
+      "motherId": "Q-H19",
+      "questionCount": 35
+    },
+    {
+      "motherId": "Q-L02",
+      "questionCount": 33
+    },
+    {
+      "motherId": "Q-L10",
+      "questionCount": 33
+    },
+    {
+      "motherId": "Q-P11",
+      "questionCount": 33
+    },
+    {
+      "motherId": "Q-H29",
+      "questionCount": 31
+    },
+    {
+      "motherId": "Q-H05",
+      "questionCount": 30
+    },
+    {
+      "motherId": "Q-H32",
+      "questionCount": 30
+    },
+    {
+      "motherId": "Q-P05",
+      "questionCount": 29
+    },
+    {
+      "motherId": "Q-H08",
+      "questionCount": 28
+    },
+    {
+      "motherId": "Q-H11",
+      "questionCount": 28
+    },
+    {
+      "motherId": "Q-H14",
+      "questionCount": 28
+    },
+    {
+      "motherId": "Q-L12",
+      "questionCount": 28
+    },
+    {
+      "motherId": "Q-L14",
+      "questionCount": 28
+    },
+    {
+      "motherId": "Q-L05",
+      "questionCount": 27
+    },
+    {
+      "motherId": "Q-P08",
+      "questionCount": 27
+    },
+    {
+      "motherId": "Q-H22",
+      "questionCount": 26
+    },
+    {
+      "motherId": "Q-H23",
+      "questionCount": 25
+    },
+    {
+      "motherId": "Q-H26",
+      "questionCount": 25
+    },
+    {
+      "motherId": "Q-H03",
+      "questionCount": 24
+    },
+    {
+      "motherId": "Q-H30",
+      "questionCount": 23
+    },
+    {
+      "motherId": "Q-L16",
+      "questionCount": 23
+    },
+    {
+      "motherId": "Q-P02",
+      "questionCount": 23
+    },
+    {
+      "motherId": "Q-P07",
+      "questionCount": 23
+    },
+    {
+      "motherId": "Q-H15",
+      "questionCount": 22
+    },
+    {
+      "motherId": "Q-H28",
+      "questionCount": 22
+    },
+    {
+      "motherId": "Q-L06",
+      "questionCount": 22
+    },
+    {
+      "motherId": "Q-H06",
+      "questionCount": 21
+    },
+    {
+      "motherId": "Q-H07",
+      "questionCount": 21
+    },
+    {
+      "motherId": "Q-L15",
+      "questionCount": 21
+    },
+    {
+      "motherId": "Q-P01",
+      "questionCount": 21
+    },
+    {
+      "motherId": "Q-H24",
+      "questionCount": 20
+    },
+    {
+      "motherId": "Q-L09",
+      "questionCount": 20
+    },
+    {
+      "motherId": "Q-L11",
+      "questionCount": 20
+    },
+    {
+      "motherId": "Q-H33",
+      "questionCount": 19
+    },
+    {
+      "motherId": "Q-P15",
+      "questionCount": 19
+    },
+    {
+      "motherId": "Q-H12",
+      "questionCount": 18
+    },
+    {
+      "motherId": "Q-H21",
+      "questionCount": 17
+    },
+    {
+      "motherId": "Q-P09",
+      "questionCount": 17
+    },
+    {
+      "motherId": "Q-P13",
+      "questionCount": 17
+    },
+    {
+      "motherId": "Q-H17",
+      "questionCount": 16
+    },
+    {
+      "motherId": "Q-L13",
+      "questionCount": 16
+    },
+    {
+      "motherId": "Q-P03",
+      "questionCount": 16
+    },
+    {
+      "motherId": "Q-P14",
+      "questionCount": 16
+    },
+    {
+      "motherId": "Q-L08",
+      "questionCount": 15
+    },
+    {
+      "motherId": "Q-H25",
+      "questionCount": 14
+    },
+    {
+      "motherId": "Q-P06",
+      "questionCount": 14
+    },
+    {
+      "motherId": "Q-H04",
+      "questionCount": 13
+    },
+    {
+      "motherId": "Q-L01",
+      "questionCount": 12
+    },
+    {
+      "motherId": "Q-L03",
+      "questionCount": 10
+    },
+    {
+      "motherId": "Q-P12",
+      "questionCount": 10
+    },
+    {
+      "motherId": "Q-P16",
+      "questionCount": 9
+    },
+    {
+      "motherId": "Q-H16",
+      "questionCount": 5
+    },
+    {
+      "motherId": "Q-P18",
+      "questionCount": 5
+    }
+  ],
+  "rightsBoundary": {
+    "mode": "anonymous-aggregate-only",
+    "note": "来源再发布权未逐项确认；不公开卷名、机构、逐题身份、题面、答案、解析或路线。"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/a1649153754-sketch/kaoyan-math1-knowledge-system/main/data/exam-evidence/v1/schemas/indexes.schema.json",
+  "title": "Bidirectional official exam evidence indexes",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schemaVersion", "byYear", "byMother", "byNode", "byErrorCause"],
+  "properties": {
+    "$schema": {"const": "kaoyan-math1/exam-evidence/indexes@1"},
+    "schemaVersion": {"const": "1.0.0"},
+    "byYear": {"$ref": "#/$defs/index"},
+    "byMother": {"$ref": "#/$defs/index"},
+    "byNode": {"$ref": "#/$defs/index"},
+    "byErrorCause": {"$ref": "#/$defs/index"}
+  },
+  "$defs": {
+    "index": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/bucket"}
+    },
+    "bucket": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["questionCount", "questionIds", "years", "motherIds", "nodeIds", "errorCauseTags"],
+      "properties": {
+        "questionCount": {"type": "integer", "minimum": 1},
+        "questionIds": {"type": "array", "items": {"type": "string", "pattern": "^20[0-9]{2}-M1-Q[0-9]{2}$"}, "minItems": 1, "uniqueItems": true},
+        "years": {"type": "array", "items": {"type": "integer", "minimum": 2010, "maximum": 2026}, "minItems": 1, "uniqueItems": true},
+        "motherIds": {"type": "array", "items": {"type": "string", "pattern": "^Q-[HLP][0-9]{2}$"}, "minItems": 1, "uniqueItems": true},
+        "nodeIds": {"type": "array", "items": {"type": "string", "pattern": "^[HLPM][0-9]+\\.[0-9]+$"}, "minItems": 1, "uniqueItems": true},
+        "errorCauseTags": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true}
+      }
+    }
+  }
+}

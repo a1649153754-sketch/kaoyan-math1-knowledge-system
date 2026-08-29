@@ -1,0 +1,55 @@
+{
+  "$schema": "kaoyan-math1/exam-evidence/manifest@1",
+  "schemaVersion": "1.0.0",
+  "releaseVersion": "1.4.0",
+  "generatedAt": "2026-08-27T08:35:05.106Z",
+  "sourceSnapshot": {
+    "project": "yansuan-protocol-local-private-layer",
+    "canonicalSchema": "yansuan/canonical-exam-index@1",
+    "baselineId": "v1.3.0",
+    "baselineSemanticHash": "ad5bfe7568d91dd0c68e516046c71566872781bf5485d49a78d7a3c34eb802b9",
+    "canonicalIndexSha256": "379469749fb663b31ef413843d8d4d77a3c175dec59405be22e3bc1e39186fed",
+    "officialYearRange": [
+      2010,
+      2026
+    ]
+  },
+  "truthfulnessBoundary": {
+    "official": "2010—2025 仅作官方年份/科目归档索引；不发布题面、答案或解析。",
+    "year2026": "考后重构；非官方原卷、非官方答案。",
+    "mock": "仅匿名聚合；再发布权未确认的卷材不进入逐题公开索引。"
+  },
+  "counts": {
+    "officialPapers": 17,
+    "officialQuestions": 385,
+    "officialMarks": 2550,
+    "mockPapers": 28,
+    "mockQuestions": 616
+  },
+  "artifacts": {
+    "officialQuestions": {
+      "path": "data/exam-evidence/v1/official-questions.json",
+      "sha256": "1d1169512ecac65a21640c6f1649b6599c48eaef4bba77fbc0ca9ea07b9d3acb"
+    },
+    "mockAggregate": {
+      "path": "data/exam-evidence/v1/mock-aggregate.json",
+      "sha256": "3b2959e276865a953e1d093fc6a8e0297a12957eb1ac2a60e631ed5ac38535ae"
+    },
+    "indexes": {
+      "path": "data/exam-evidence/v1/indexes.json",
+      "sha256": "1a83e8f24ee93fcf3d0fd8bb19ee6c1dcb8c6ebb93b8b15c604ae5aab92ae35e"
+    },
+    "officialQuestionsSchema": {
+      "path": "data/exam-evidence/v1/schemas/official-questions.schema.json",
+      "sha256": "1046f47a43e4503b0e8300edb81a675475b1486ea57a8629fc98672453ff2b7f"
+    },
+    "mockAggregateSchema": {
+      "path": "data/exam-evidence/v1/schemas/mock-aggregate.schema.json",
+      "sha256": "db02e2be74067fe814e21561294af71e473c9e76e91e9163993ad7a52f57b0da"
+    },
+    "indexesSchema": {
+      "path": "data/exam-evidence/v1/schemas/indexes.schema.json",
+      "sha256": "b0a44a4da0d6b9c74c71525d5fdc34edb14e0738821ea8eaf53c6911243dead1"
+    }
+  }
+}
