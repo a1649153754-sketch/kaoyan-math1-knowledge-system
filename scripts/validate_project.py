@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import unquote
 
+from content_audit import ContentAuditError, validate_content_audits
 from exam_evidence import ExamEvidenceError, validate_exam_evidence
 from local_data import PRIVATE_COLUMNS, LocalDataError, load_contracts
 
@@ -454,6 +455,7 @@ def validate_project(root: Path = ROOT) -> dict[str, object]:
     validate_local_links(root)
     version = validate_release_metadata(root)
     exam_evidence = validate_exam_evidence(root, catalog)
+    content_audit = validate_content_audits(root)
     resource_counts = Counter(row.kind for row in catalog.resources.values())
     return {
         "version": version,
@@ -464,6 +466,7 @@ def validate_project(root: Path = ROOT) -> dict[str, object]:
         "resourceCounts": dict(sorted(resource_counts.items())),
         "dataSchemaVersion": data_schema_version,
         "examEvidence": exam_evidence,
+        "contentAudit": content_audit,
         "unresolvedResourceMentions": 0,
     }
 
@@ -471,7 +474,14 @@ def validate_project(root: Path = ROOT) -> dict[str, object]:
 def main() -> int:
     try:
         stats = validate_project(ROOT)
-    except (OSError, ExamEvidenceError, LocalDataError, ProjectValidationError, tomllib.TOMLDecodeError) as error:
+    except (
+        OSError,
+        ContentAuditError,
+        ExamEvidenceError,
+        LocalDataError,
+        ProjectValidationError,
+        tomllib.TOMLDecodeError,
+    ) as error:
         print(f"ERROR: {error}", file=sys.stderr)
         return 1
     print("Project validation passed")
@@ -488,6 +498,10 @@ def main() -> int:
     print(
         "  mock exam evidence:          "
         f"{stats['examEvidence']['mockPapers']} papers / {stats['examEvidence']['mockQuestions']} questions (aggregate only)"
+    )
+    print(
+        "  audited execution cards:     "
+        f"{stats['contentAudit']['auditedNodes']} nodes in {stats['contentAudit']['auditedChapters']}"
     )
     print(f"  unresolved resource mentions:{stats['unresolvedResourceMentions']}")
     return 0
