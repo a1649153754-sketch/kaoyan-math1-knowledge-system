@@ -19,13 +19,14 @@
 
 ## 三、编号规则
 
-- 正文节点：`H / L / P / M`。
+- 正式正文节点：只取 `docs/01—04`“知识节点”列表中的 `H/L/P/M数字.数字`。
+- 三级清单项：完整 ID 形如 `H1.5-a`，属于独立命名空间；它的数字前缀不自动成为正式节点。
 - 公式卡：`F-模块-序号`，例如 `F-H1-03`。
 - 母题：`Q-H / Q-L / Q-P`。
 - 反例：`B-H / B-L / B-P`。
 - 个人高频疑问：`J-01` 起连续编号。
 
-旧编号原则上不复用、不重排。节点废弃时注明迁移位置，而不是静默删除。
+资源关联必须解析到正式节点或合法章节。已发布 ID 由 `data/released-identities.v1.json` 冻结，不复用、不重排；废弃时注明 `deprecated/replacedBy`，不能静默删除。
 
 ## 四、个人数据层
 
@@ -41,7 +42,9 @@
 
 ```bash
 # 1. 编辑 docs/ 与 data/
+python -m unittest discover -s tests -p "test_*.py"
 python scripts/validate_project.py
+python scripts/build_released_identities.py --check
 
 # 2. 修改 VERSION，例如 1.3.0
 python scripts/build_bundle.py
@@ -51,6 +54,8 @@ python scripts/build_bundle.py
 ```
 
 `build_bundle.py` 会读取 `VERSION`，把分章节正文合并到 `dist/`。确认内容无误后，将单文件 Markdown、Word、PDF 或压缩包作为 GitHub Release 资产发布；`releases/vX.Y/` 只保留版本说明与必要元数据。
+
+只有在正式发布新增 ID 时，才运行 `python scripts/build_released_identities.py --snapshot-version <版本>` 更新稳定身份基线；普通内容修订不得改写该文件。
 
 ## 六、推荐的分支和提交方式
 

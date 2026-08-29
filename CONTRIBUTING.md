@@ -23,10 +23,11 @@
 
 ## 编号规范
 
-- 高数：`H0—H10`；线代：`L0—L7`；概率统计：`P1—P9`；方法库：`M1—M7`。
-- 三级项采用 `H1.5-a` 一类格式。
-- 公式、母题、反例和个人疑问分别使用 `F-`、`Q-`、`B-`、`J-` 前缀。
-- 已发布编号原则上不重排；需要迁移时保留旧编号和新位置说明。
+- **正式知识节点**：`docs/01—04` 中的 `H/L/P/M数字.数字`，例如 `H7.5`。只有这些编号可以作为下游题目与资源的正式节点。
+- **三级清单项**：`docs/06-checklists.md` 中的完整 `H1.5-a` 一类编号。它是独立检查项；`H6.11-a` 的前缀 `H6.11` 不一定是正式节点。
+- **知识资源**：公式、母题、反例和个人疑问分别使用 `F-`、`Q-`、`B-`、`J-` 前缀。
+- 资源关联栏优先填写正式节点；若精确引用清单项，该清单项的父编号必须同时是正式节点，避免下游把清单前缀误识别为悬空节点。
+- 已发布 ID 受 `data/released-identities.v1.json` 保护，不得重排、删除或换用。废弃时保留原 ID，并显式记录 `deprecated/replacedBy` 迁移。
 
 ## 版权与来源
 
@@ -39,7 +40,9 @@
 3. 运行：
 
 ```bash
+python -m unittest discover -s tests -p "test_*.py"
 python scripts/validate_project.py
+python scripts/build_released_identities.py --check
 zensical build --clean
 ```
 

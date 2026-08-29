@@ -8,10 +8,11 @@
 
 ## 当前版本
 
-**v1.2.0 · 2026-08-25**
+**v1.2.1 · 2026-08-29**
 
 | 模块 | 当前规模 |
 | --- | ---: |
+| 正式知识节点 | 253 |
 | 三级知识点检查项 | 321 |
 | 公式与结论速查卡 | 212 |
 | 典型真题母题 | 68 |
@@ -24,6 +25,7 @@
 - **条件优先**：公式与定理同时记录触发条件、结论和失效边界，不做裸公式堆砌。
 - **题目挂接**：真题、错题和疑问可挂到 `Q / B / J` 编号，逐步形成个人掌握图谱。
 - **版本可追溯**：`releases/` 保存历史版本；`CHANGELOG.md` 记录每次升级。
+- **契约可校验**：正式节点、三级清单项与 `F / Q / B / J` 资源使用独立命名空间；发布过的 ID 由机器基线保护。
 - **网页可发布**：内置 Zensical 配置和 GitHub Actions，推送后可自动部署为 GitHub Pages 文档站。
 
 ## 快速阅读
@@ -75,9 +77,10 @@ zensical build --clean
 
 1. 在 `docs/` 对应章节中增补内容。
 2. 给新增内容分配稳定编号，并补齐“条件—结论—边界—掌握证据”。
-3. 运行 `python scripts/validate_project.py` 检查结构和编号。
-4. 运行 `python scripts/build_bundle.py` 生成新的单文件 Markdown。
-5. 更新 `VERSION` 与 `CHANGELOG.md`，再提交 Pull Request 或创建新版本标签。
+3. 运行 `python -m unittest discover -s tests -p "test_*.py"` 和 `python scripts/validate_project.py` 检查结构、编号、引用、链接与公开数据边界。
+4. 运行 `python scripts/build_released_identities.py --check` 确认已发布 ID 未被删除或换用。
+5. 运行 `python scripts/build_bundle.py` 生成新的单文件 Markdown。
+6. 更新 `VERSION` 与 `CHANGELOG.md`，再提交 Pull Request 或创建新版本标签。
 
 详细规则见 [CONTRIBUTING.md](CONTRIBUTING.md) 与 [项目维护指南](docs/14-project-maintenance.md)。
 
@@ -86,9 +89,10 @@ zensical build --clean
 ```text
 .
 ├─ docs/                    # 可直接编辑、可发布成网站的分章节正文
-├─ releases/                # v1.0 / v1.1 / v1.2 历史快照
-├─ data/                    # 个人掌握度、真题和错题的空白数据表
+├─ releases/                # v1.0 / v1.1 / v1.2 / v1.2.1 历史快照
+├─ data/                    # 空白数据表与已发布稳定 ID 基线
 ├─ scripts/                 # 校验与单文件打包脚本
+├─ tests/                   # 项目契约的正例与故障夹具
 ├─ .github/                 # Actions、Issue 表单和 PR 模板
 ├─ zensical.toml            # 文档站配置
 ├─ CHANGELOG.md             # 版本更新记录

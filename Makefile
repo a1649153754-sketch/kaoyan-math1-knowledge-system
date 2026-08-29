@@ -1,4 +1,4 @@
-.PHONY: install serve build validate bundle clean
+.PHONY: install serve build test validate identities bundle clean
 
 install:
 	python -m pip install -r requirements.txt
@@ -11,6 +11,12 @@ build:
 
 validate:
 	python scripts/validate_project.py
+
+test:
+	python -m unittest discover -s tests -p "test_*.py"
+
+identities:
+	python scripts/build_released_identities.py --check
 
 bundle:
 	python scripts/build_bundle.py
