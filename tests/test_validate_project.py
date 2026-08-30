@@ -44,7 +44,7 @@ class ProjectContractTests(unittest.TestCase):
     def test_repository_baseline_passes(self) -> None:
         stats = validate_project(self.repo)
         self.assertEqual(stats["knowledgeNodes"], 253)
-        self.assertEqual(stats["checklistItems"], 321)
+        self.assertEqual(stats["checklistItems"], 351)
         self.assertEqual(stats["resources"], 332)
         self.assertEqual(stats["dataSchemaVersion"], "1.0.0")
         self.assertEqual(stats["examEvidence"]["officialQuestions"], 385)
@@ -52,6 +52,7 @@ class ProjectContractTests(unittest.TestCase):
         self.assertEqual(stats["contentAudit"]["auditedNodes"], 253)
         self.assertEqual(stats["contentAudit"]["detailedExplanations"], 87)
         self.assertEqual(stats["contentAudit"]["gentleExplanations"], 253)
+        self.assertEqual(stats["contentAudit"]["nodeSelfChecks"], 253)
         self.assertEqual(stats["contentAudit"]["zeroEvidenceNodes"], 71)
         self.assertEqual(stats["sprintManual"]["objectiveCandidates"], 56)
         self.assertEqual(stats["sprintManual"]["selectedFormulas"], 64)
@@ -74,6 +75,13 @@ class ProjectContractTests(unittest.TestCase):
         lines = [line for line in lines if not line.startswith("- M7.4 ")]
         path.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
         self.assert_invalid("released knowledgeNodes were removed or renamed")
+
+    def test_formal_node_without_checklist_is_rejected(self) -> None:
+        path = self.repo / "docs/06-checklists.md"
+        lines = path.read_text(encoding="utf-8").splitlines()
+        lines = [line for line in lines if not line.startswith("- [ ] M1.1-a ")]
+        path.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
+        self.assert_invalid("formal knowledge nodes lack a node-level checklist item: ['M1.1']")
 
     def test_duplicate_resource_id_is_rejected(self) -> None:
         path = self.repo / "docs/11-problem-archetypes.md"

@@ -48,6 +48,7 @@ class ContentAuditContractTests(unittest.TestCase):
         self.assertEqual(stats["auditedNodes"], 253)
         self.assertEqual(stats["detailedExplanations"], 87)
         self.assertEqual(stats["gentleExplanations"], 253)
+        self.assertEqual(stats["nodeSelfChecks"], 253)
         self.assertEqual(stats["zeroEvidenceNodes"], 71)
 
     def test_missing_whole_chapter_is_rejected(self) -> None:
@@ -107,6 +108,29 @@ class ContentAuditContractTests(unittest.TestCase):
     def test_missing_gentle_explanation_is_rejected(self) -> None:
         self.mutate("docs/01-calculus.md", "- **温柔讲解**：", "- **节点寄语**：")
         self.assert_invalid("execution card fields missing for H0.1")
+
+    def test_missing_node_self_check_is_rejected(self) -> None:
+        self.mutate("docs/01-calculus.md", "- **自测追问**：", "- **复习提示**：")
+        self.assert_invalid("execution card fields missing for H0.1")
+
+    def test_node_self_check_must_match_its_title(self) -> None:
+        self.mutate(
+            "docs/01-calculus.md",
+            "围绕“基本初等函数：幂、指数、对数、三角、反三角函数的定义域、值域、图像与单调性”说一遍",
+            "围绕“完全无关的主题”说一遍",
+        )
+        self.assert_invalid("node self-check is not tied to its title: H0.1")
+
+    def test_node_self_check_requires_a_boundary_prompt(self) -> None:
+        self.mutate(
+            "docs/01-calculus.md",
+            r"^- \*\*自测追问\*\*：[^\n]+$",
+            "- **自测追问**：围绕“基本初等函数”说明对象、条件和计算步骤："
+            "再把每一个代数变形的来由完整说清楚，并用定义检查最后的表达式是否满足题目要求；"
+            "还要另选两个不同的函数逐一核对定义域、值域、单调区间和图像变化是否一致。",
+            regex=True,
+        )
+        self.assert_invalid("node self-check lacks a boundary prompt: H0.1")
 
     def test_gentle_explanation_cannot_be_too_short(self) -> None:
         self.mutate(
