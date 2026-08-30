@@ -15,6 +15,7 @@ from urllib.parse import unquote
 from content_audit import ContentAuditError, validate_content_audits
 from exam_evidence import ExamEvidenceError, validate_exam_evidence
 from local_data import PRIVATE_COLUMNS, LocalDataError, load_contracts
+from build_sprint_manual import SprintManualError, validate_sprint_manual
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -54,6 +55,8 @@ REQUIRED_FILES = (
     "docs/14-project-maintenance.md",
     "docs/15-local-data.md",
     "docs/16-exam-evidence-index.md",
+    "docs/17-sprint-manual.md",
+    "data/sprint-guide/v1/selection.json",
 )
 TOPIC_RE = re.compile(r"^-\s+([HLPM]\d+\.\d+)\s+(.+)$")
 CHAPTER_RE = re.compile(r"^##\s+([HLPM]\d+)\b")
@@ -490,6 +493,7 @@ def validate_project(root: Path = ROOT) -> dict[str, object]:
     version = validate_release_metadata(root)
     exam_evidence = validate_exam_evidence(root, catalog)
     content_audit = validate_content_audits(root)
+    sprint_manual = validate_sprint_manual(root)
     resource_counts = Counter(row.kind for row in catalog.resources.values())
     return {
         "version": version,
@@ -501,6 +505,7 @@ def validate_project(root: Path = ROOT) -> dict[str, object]:
         "dataSchemaVersion": data_schema_version,
         "examEvidence": exam_evidence,
         "contentAudit": content_audit,
+        "sprintManual": sprint_manual,
         "mathRendering": math_rendering,
         "unresolvedResourceMentions": 0,
     }
@@ -514,6 +519,7 @@ def main() -> int:
         ContentAuditError,
         ExamEvidenceError,
         LocalDataError,
+        SprintManualError,
         ProjectValidationError,
         tomllib.TOMLDecodeError,
     ) as error:
@@ -537,6 +543,12 @@ def main() -> int:
     print(
         "  audited execution cards:     "
         f"{stats['contentAudit']['auditedNodes']} nodes in {stats['contentAudit']['auditedChapters']}"
+    )
+    print(
+        "  v1.5 sprint manual:           "
+        f"{stats['sprintManual']['objectiveCandidates']} nodes / "
+        f"{stats['sprintManual']['selectedFormulas']} formulas / "
+        f"{stats['sprintManual']['counterexamples']} counterexamples"
     )
     print(
         "  math rendering:              "

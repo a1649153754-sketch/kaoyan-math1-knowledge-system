@@ -13,6 +13,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from local_data import LocalDataError  # noqa: E402
 from content_audit import ContentAuditError  # noqa: E402
 from exam_evidence import ExamEvidenceError  # noqa: E402
+from build_sprint_manual import SprintManualError  # noqa: E402
 from validate_project import ProjectValidationError, validate_project  # noqa: E402
 
 
@@ -36,7 +37,7 @@ class ProjectContractTests(unittest.TestCase):
         path.write_text(content.replace(old, new, 1), encoding="utf-8", newline="\n")
 
     def assert_invalid(self, expected: str) -> None:
-        with self.assertRaises((ContentAuditError, ExamEvidenceError, LocalDataError, ProjectValidationError)) as context:
+        with self.assertRaises((ContentAuditError, ExamEvidenceError, LocalDataError, ProjectValidationError, SprintManualError)) as context:
             validate_project(self.repo)
         self.assertIn(expected, str(context.exception))
 
@@ -47,7 +48,14 @@ class ProjectContractTests(unittest.TestCase):
         self.assertEqual(stats["resources"], 332)
         self.assertEqual(stats["dataSchemaVersion"], "1.0.0")
         self.assertEqual(stats["examEvidence"]["officialQuestions"], 385)
-        self.assertEqual(stats["contentAudit"]["auditedNodes"], 21)
+        self.assertEqual(len(stats["contentAudit"]["auditedChapters"]), 35)
+        self.assertEqual(stats["contentAudit"]["auditedNodes"], 253)
+        self.assertEqual(stats["contentAudit"]["detailedExplanations"], 87)
+        self.assertEqual(stats["contentAudit"]["zeroEvidenceNodes"], 71)
+        self.assertEqual(stats["sprintManual"]["objectiveCandidates"], 56)
+        self.assertEqual(stats["sprintManual"]["selectedFormulas"], 64)
+        self.assertEqual(stats["sprintManual"]["theoremSections"], 21)
+        self.assertEqual(stats["sprintManual"]["counterexamples"], 40)
         self.assertEqual(stats["mathRendering"], {"engine": "MathJax 3", "arithmatex": True})
         self.assertEqual(stats["unresolvedResourceMentions"], 0)
 

@@ -26,6 +26,7 @@ ORDER = [
     "14-project-maintenance.md",
     "15-local-data.md",
     "16-exam-evidence-index.md",
+    "17-sprint-manual.md",
 ]
 
 version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
