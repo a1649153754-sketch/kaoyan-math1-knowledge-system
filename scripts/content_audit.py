@@ -19,12 +19,12 @@ REQUIRED_CHAPTER_HEADINGS = (
     "达标标准",
     "来源与证据边界",
 )
-REQUIRED_FIELDS = ("触发信号", "适用条件", "执行动作", "失效边界", "母题证据", "来源")
+REQUIRED_FIELDS = ("触发信号", "适用条件", "执行动作", "失效边界", "母题证据", "来源", "温柔讲解")
 EXPLANATION_LABELS = ("为什么成立", "怎么用", "小例题 / 路线演示", "哪里会失效")
 CHAPTER_RE = re.compile(r"^##\s+([HLPM]\d+)\b")
 NODE_RE = re.compile(r"^-\s+([HLPM]\d+\.\d+)\s+(.+)$")
 CARD_HEADER_RE = re.compile(r"^####\s+([HLPM]\d+\.\d+)\s+(.+)$")
-FIELD_RE = re.compile(r"^-\s+\*\*(触发信号|适用条件|执行动作|失效边界|母题证据|来源)\*\*：(.+)$")
+FIELD_RE = re.compile(r"^-\s+\*\*(触发信号|适用条件|执行动作|失效边界|母题证据|来源|温柔讲解)\*\*：(.+)$")
 EXPLANATION_RE = re.compile(r"^###\s+核心讲解(?:\d+|[一二三四五六七八九十]+)：(.+)$")
 EVIDENCE_RE = re.compile(
     r"公开真题\s+(\d+)\s+题，挂接分值\s+(\d+)\s+分，平均难度\s+(暂无|\d+(?:\.\d+)?)"
@@ -204,6 +204,7 @@ def validate_content_audits(root: Path) -> dict[str, object]:
     discovered_chapters: set[str] = set()
     explanation_count = 0
     zero_evidence_nodes = 0
+    gentle_explanations: dict[str, str] = {}
 
     for relative in TOPIC_FILES:
         try:
@@ -237,6 +238,19 @@ def validate_content_audits(root: Path) -> dict[str, object]:
                 missing_fields = [name for name in REQUIRED_FIELDS if not fields.get(name)]
                 if missing_fields:
                     fail(f"execution card fields missing for {node_id}: {missing_fields}")
+                gentle = str(fields["温柔讲解"])
+                if len(gentle) < 220:
+                    fail(f"gentle explanation is too short for {node_id}: {len(gentle)} characters")
+                if f"`{node_id}`" not in gentle:
+                    fail(f"gentle explanation is not tied to its node ID: {node_id}")
+                if not any(marker in gentle for marker in ("别急", "慢一点", "没关系", "稳稳", "不用", "不妨", "轻轻", "温顺", "责怪")):
+                    fail(f"gentle explanation lacks a supportive tone marker: {node_id}")
+                if gentle in gentle_explanations:
+                    fail(
+                        f"duplicate gentle explanation for {node_id} and "
+                        f"{gentle_explanations[gentle]}"
+                    )
+                gentle_explanations[gentle] = node_id
                 zero_evidence_nodes += int(
                     _validate_evidence(
                         node_id,
@@ -262,5 +276,6 @@ def validate_content_audits(root: Path) -> dict[str, object]:
         "auditedChapters": sorted(discovered_chapters),
         "auditedNodes": len(discovered_nodes),
         "detailedExplanations": explanation_count,
+        "gentleExplanations": len(gentle_explanations),
         "zeroEvidenceNodes": zero_evidence_nodes,
     }

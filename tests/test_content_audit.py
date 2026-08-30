@@ -47,6 +47,7 @@ class ContentAuditContractTests(unittest.TestCase):
         self.assertEqual(len(stats["auditedChapters"]), 35)
         self.assertEqual(stats["auditedNodes"], 253)
         self.assertEqual(stats["detailedExplanations"], 87)
+        self.assertEqual(stats["gentleExplanations"], 253)
         self.assertEqual(stats["zeroEvidenceNodes"], 71)
 
     def test_missing_whole_chapter_is_rejected(self) -> None:
@@ -102,6 +103,37 @@ class ContentAuditContractTests(unittest.TestCase):
     def test_explanation_requires_all_reasoning_segments(self) -> None:
         self.mutate("docs/01-calculus.md", "**为什么成立**：", "**原理说明**：")
         self.assert_invalid("detailed explanation lacks '为什么成立' in H0")
+
+    def test_missing_gentle_explanation_is_rejected(self) -> None:
+        self.mutate("docs/01-calculus.md", "- **温柔讲解**：", "- **节点寄语**：")
+        self.assert_invalid("execution card fields missing for H0.1")
+
+    def test_gentle_explanation_cannot_be_too_short(self) -> None:
+        self.mutate(
+            "docs/01-calculus.md",
+            r"^- \*\*温柔讲解\*\*：[^\n]+$",
+            "- **温柔讲解**：`H0.1` 别急，我们慢慢来。",
+            regex=True,
+        )
+        self.assert_invalid("gentle explanation is too short for H0.1")
+
+    def test_gentle_explanations_cannot_be_duplicated(self) -> None:
+        path = self.repo / "docs/01-calculus.md"
+        text = path.read_text(encoding="utf-8")
+        matches = list(re.finditer(r"^- \*\*温柔讲解\*\*：([^\n]+)$", text, re.MULTILINE))
+        self.assertGreaterEqual(len(matches), 2)
+        repeated = (
+            "`H0.1` 与 `H0.2` 先别急，我们把对象、条件、第一动作和停止边界慢慢拆开。"
+            "先写定义域，再检查每一步是否双向成立；遇到分支、零点或不可逆变形时就稳稳停下来补条件。"
+            "完成后用定义、反算和最小反例各检查一次，这样不是在拖慢速度，而是在让后面的推理更可靠。"
+            "等你能亲口解释为什么这样起步、又为什么在这里停止，这两个节点就不再只是背诵，而会成为可以反复调用的判断力。"
+            "哪怕今天只把第一步做对也很好，明天再回来补第二步；每一次清楚的小检查，都会让整条知识链更稳一些。"
+        )
+        duplicate = f"- **温柔讲解**：{repeated}"
+        for match in reversed(matches[:2]):
+            text = text[: match.start()] + duplicate + text[match.end() :]
+        path.write_text(text, encoding="utf-8", newline="\n")
+        self.assert_invalid("duplicate gentle explanation for H0.2 and H0.1")
 
 
 if __name__ == "__main__":
