@@ -48,11 +48,11 @@ python scripts/build_released_identities.py --check
 python scripts/build_exam_evidence_indexes.py --check
 python scripts/check_bundle_deterministic.py
 
-# 2. 修改 VERSION，例如 1.4.0
+# 2. 修改 VERSION，例如 1.5.0
 python scripts/check_bundle_deterministic.py
 
 # 3. 更新 CHANGELOG.md
-# 4. 提交、合并并创建 v1.4.0 标签
+# 4. 提交、合并并创建 v1.5.0 标签
 ```
 
 `build_bundle.py` 会读取 `VERSION`，把分章节正文合并到 `dist/`。确认内容无误后，将单文件 Markdown、Word、PDF 或压缩包作为 GitHub Release 资产发布；`releases/vX.Y/` 只保留版本说明与必要元数据。

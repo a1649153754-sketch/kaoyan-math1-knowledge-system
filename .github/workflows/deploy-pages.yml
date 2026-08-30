@@ -36,6 +36,7 @@ jobs:
           python scripts/validate_project.py
           python scripts/build_released_identities.py --check
           python scripts/build_exam_evidence_indexes.py --check
+          python scripts/build_sprint_manual.py --check
           python scripts/check_bundle_deterministic.py
 
       - name: Build documentation
