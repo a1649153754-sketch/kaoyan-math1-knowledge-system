@@ -542,7 +542,8 @@ def main() -> int:
     )
     print(
         "  audited execution cards:     "
-        f"{stats['contentAudit']['auditedNodes']} nodes in {stats['contentAudit']['auditedChapters']}"
+        f"{stats['contentAudit']['auditedNodes']} nodes / "
+        f"{stats['contentAudit']['gentleExplanations']} gentle explanations"
     )
     print(
         "  v1.5 sprint manual:           "

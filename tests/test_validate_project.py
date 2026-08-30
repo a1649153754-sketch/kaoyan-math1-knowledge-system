@@ -51,6 +51,7 @@ class ProjectContractTests(unittest.TestCase):
         self.assertEqual(len(stats["contentAudit"]["auditedChapters"]), 35)
         self.assertEqual(stats["contentAudit"]["auditedNodes"], 253)
         self.assertEqual(stats["contentAudit"]["detailedExplanations"], 87)
+        self.assertEqual(stats["contentAudit"]["gentleExplanations"], 253)
         self.assertEqual(stats["contentAudit"]["zeroEvidenceNodes"], 71)
         self.assertEqual(stats["sprintManual"]["objectiveCandidates"], 56)
         self.assertEqual(stats["sprintManual"]["selectedFormulas"], 64)
