@@ -347,6 +347,13 @@ def current_identities(catalog: Catalog) -> dict[str, object]:
     }
 
 
+def validate_checklist_coverage(catalog: Catalog) -> None:
+    covered_nodes = {item_id.rsplit("-", 1)[0] for item_id in catalog.checklist_items}
+    missing = sorted(set(catalog.topics) - covered_nodes, key=natural_key)
+    if missing:
+        fail(f"formal knowledge nodes lack a node-level checklist item: {missing[:20]}")
+
+
 def validate_released_identities(root: Path, catalog: Catalog) -> None:
     relative = "data/released-identities.v1.json"
     try:
@@ -485,6 +492,7 @@ def validate_project(root: Path = ROOT) -> dict[str, object]:
     validate_navigation(root)
     math_rendering = validate_math_rendering(root)
     catalog = collect_catalog(root)
+    validate_checklist_coverage(catalog)
     validate_resource_references(catalog)
     validate_released_identities(root, catalog)
     data_schema_version = validate_csv_templates(root)
@@ -543,7 +551,8 @@ def main() -> int:
     print(
         "  audited execution cards:     "
         f"{stats['contentAudit']['auditedNodes']} nodes / "
-        f"{stats['contentAudit']['gentleExplanations']} gentle explanations"
+        f"{stats['contentAudit']['gentleExplanations']} gentle explanations / "
+        f"{stats['contentAudit']['nodeSelfChecks']} self-checks"
     )
     print(
         "  v1.5 sprint manual:           "

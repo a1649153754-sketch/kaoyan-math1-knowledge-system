@@ -19,12 +19,23 @@ REQUIRED_CHAPTER_HEADINGS = (
     "达标标准",
     "来源与证据边界",
 )
-REQUIRED_FIELDS = ("触发信号", "适用条件", "执行动作", "失效边界", "母题证据", "来源", "温柔讲解")
+REQUIRED_FIELDS = (
+    "触发信号",
+    "适用条件",
+    "执行动作",
+    "失效边界",
+    "自测追问",
+    "母题证据",
+    "来源",
+    "温柔讲解",
+)
 EXPLANATION_LABELS = ("为什么成立", "怎么用", "小例题 / 路线演示", "哪里会失效")
 CHAPTER_RE = re.compile(r"^##\s+([HLPM]\d+)\b")
 NODE_RE = re.compile(r"^-\s+([HLPM]\d+\.\d+)\s+(.+)$")
 CARD_HEADER_RE = re.compile(r"^####\s+([HLPM]\d+\.\d+)\s+(.+)$")
-FIELD_RE = re.compile(r"^-\s+\*\*(触发信号|适用条件|执行动作|失效边界|母题证据|来源|温柔讲解)\*\*：(.+)$")
+FIELD_RE = re.compile(
+    r"^-\s+\*\*(触发信号|适用条件|执行动作|失效边界|自测追问|母题证据|来源|温柔讲解)\*\*：(.+)$"
+)
 EXPLANATION_RE = re.compile(r"^###\s+核心讲解(?:\d+|[一二三四五六七八九十]+)：(.+)$")
 EVIDENCE_RE = re.compile(
     r"公开真题\s+(\d+)\s+题，挂接分值\s+(\d+)\s+分，平均难度\s+(暂无|\d+(?:\.\d+)?)"
@@ -205,6 +216,7 @@ def validate_content_audits(root: Path) -> dict[str, object]:
     explanation_count = 0
     zero_evidence_nodes = 0
     gentle_explanations: dict[str, str] = {}
+    self_checks: dict[str, str] = {}
 
     for relative in TOPIC_FILES:
         try:
@@ -238,6 +250,20 @@ def validate_content_audits(root: Path) -> dict[str, object]:
                 missing_fields = [name for name in REQUIRED_FIELDS if not fields.get(name)]
                 if missing_fields:
                     fail(f"execution card fields missing for {node_id}: {missing_fields}")
+                self_check = str(fields["自测追问"])
+                if len(self_check) < 70:
+                    fail(f"node self-check is too short for {node_id}: {len(self_check)} characters")
+                if expected_title not in self_check:
+                    fail(f"node self-check is not tied to its title: {node_id}")
+                if "？" not in self_check and "：" not in self_check:
+                    fail(f"node self-check lacks a concrete prompt: {node_id}")
+                if not any(marker in self_check for marker in ("条件", "前提", "对象")):
+                    fail(f"node self-check lacks a condition prompt: {node_id}")
+                if not any(marker in self_check for marker in ("边界", "失效", "停下", "反例")):
+                    fail(f"node self-check lacks a boundary prompt: {node_id}")
+                if self_check in self_checks:
+                    fail(f"duplicate node self-check for {node_id} and {self_checks[self_check]}")
+                self_checks[self_check] = node_id
                 gentle = str(fields["温柔讲解"])
                 if len(gentle) < 220:
                     fail(f"gentle explanation is too short for {node_id}: {len(gentle)} characters")
@@ -277,5 +303,6 @@ def validate_content_audits(root: Path) -> dict[str, object]:
         "auditedNodes": len(discovered_nodes),
         "detailedExplanations": explanation_count,
         "gentleExplanations": len(gentle_explanations),
+        "nodeSelfChecks": len(self_checks),
         "zeroEvidenceNodes": zero_evidence_nodes,
     }
